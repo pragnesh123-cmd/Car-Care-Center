@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en" dir="ltr">
-<!-- Mirrored from red-parts.html.themeforest.scompiler.ru/themes/red-ltr/account-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 25 Jan 2021 07:34:50 GMT -->
 
 <head>
 	<meta charset="UTF-8">
@@ -19,8 +18,9 @@
 	<link rel="stylesheet" href="{% static " css/style.header-spaceship-variant-one.css" %}"
 		media="(min-width: 1200px)">
 	<link rel="stylesheet" href="{% static " css/style.mobile-header-variant-one.css" %}" media="(max-width: 1199px)">
+
 	<!-- font - fontawesome -->
-	<link rel="stylesheet" href="{% static " vendor/fontawesome/css/all.min.css" %}">
+	<link rel="stylesheet" href="{% static "vendor/fontawesome/css/all.min.css" %}">
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-97489509-8"></script>
 
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -44,11 +44,9 @@
         });
     });
 </script>
-
 </head>
-
 <body>
-	{% include "car/base.html" %}
+	{% include "car/customerbase.html" %}
 
 	<!-- site__body -->
 	<div class="site__body">
@@ -59,7 +57,16 @@
 					<div class="col-md-8 d-flex mt-4 mt-md-0" style="margin: auto;">
 						<div class="card flex-grow-1 mb-0 ml-0 ml-lg-3 mr-0 mr-lg-4">
 							<div class="card-body card-body--padding--2">
-								<h6>{{text}}</h6>
+								{% if text %}
+								<div class="alert alert-success">
+									<strong>{{text}}</strong>
+								  </div>
+								  {% endif %}
+								  {% if mail %}
+								<div class="alert alert-info">
+									<strong>{{mail}}</strong> 
+								  </div>
+								{% endif %}
 								<h3 class="card-title">Register</h3>
 								<form method="POST">
 									{% csrf_token %}
@@ -87,7 +94,7 @@
 										<div class="input-group-prepend">
 											<span class="input-group-text"> <i class="fa fa-phone"></i> </span>
 										</div>
-										<select class="custom-select" style="max-width: 60px;">
+										<select class="custom-select" style="max-width: 70px;">
 											<option selected="">+91</option>
 										</select>
 										<input name="mobile_no" id="mobile_no" class="form-control" placeholder="Phone number" >
@@ -135,7 +142,6 @@
 		</div>
 		<div class="block-space block-space--layout--before-footer"></div>
 	</div><!-- site__body / end -->
-
 	<!-- scripts -->
 	<script src="{% static " vendor/jquery/jquery.min.js" %}"></script>
 	<script src="{% static " vendor/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
@@ -148,5 +154,4 @@
 	<script src="{% static " js/main.js" %}"></script>
 	{% include "car/footer.html" %}
 </body>
-
 </html>

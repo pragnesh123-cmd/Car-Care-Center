@@ -26,15 +26,21 @@ urlpatterns = [
     path('contactus/', views.contactus),
     path('trackorder/',views.trackorder),
     path('register/',views.register),
-    path('login',views.login),
+    # path('customerbase',views.customerlogin),
     path('changepassword',views.changepassword),
     path('forgotpassword',views.forgotpassword),
 
     # Customer Url
-    path ('customerbase',views.customerbase),
-    path('customerlogin',views.customerlogin),
+    path('customerbase',views.customerbase,name ='customerbase'),
+    path('login',views.customerlogin,name='customerlogin'),
     path("feedback",views.feedback),
+    path("customer_dashboard",views.customer_dashboard , name='customer_dashboard'),
+    path("invoice" ,views.invoice),
+    path("service",views.service),
+    path("customer_view_request",views.customer_view_request),
+    path("customer_add_request",views.customer_add_request),
+    path("customer_view_approved_request",views.customer_view_approved_request),
+    path("customer_view_approved_bill",views.customer_approved_request_bill),
+    path("customer_logout",views.customer_logout)
    
-
-
 ]

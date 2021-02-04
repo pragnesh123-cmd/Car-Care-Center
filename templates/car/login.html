@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-{% load static %}
-<html lang="en" dir="ltr">
-<!-- Mirrored from red-parts.html.themeforest.scompiler.ru/themes/red-ltr/account-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 25 Jan 2021 07:34:50 GMT -->
+<html>
+	
+	{% load static %}
 
 <head>
 	<meta charset="UTF-8">
@@ -19,6 +19,7 @@
 	<link rel="stylesheet" href="{% static "css/style.header-spaceship-variant-one.css" %}"
 		media="(min-width: 1200px)">
 	<link rel="stylesheet" href="{% static "css/style.mobile-header-variant-one.css" %}" media="(max-width: 1199px)">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 	<!-- font - fontawesome -->
 	<link rel="stylesheet" href="{% static "vendor/fontawesome/css/all.min.css" %}">
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-97489509-8"></script>
@@ -33,26 +34,31 @@
 		<div class="block-space block-space--layout--after-header"></div>
 		<div class="block">
 			<div class="container container--max--lg">
-				<div class="row">
+				<div class="row">	
 					<div class="col-md-6 d-flex" style="margin: auto;">
 						<div class="card flex-grow-1 mb-md-0 mr-0 mr-lg-3 ml-0 ml-lg-4">
 							<div class="card-body card-body--padding--2">
+								{% if text %}
+								<div class="alert alert-danger">
+									<strong>{{text}}</strong> 
+								  </div>
+								  {% endif %}
 								<h3>{{stu}}</h3>
 								<h3 class="card-title">Login</h3>
 								<form method="POST">
-									
+									{% csrf_token %}
 									<div class="form-group input-group">
 										<div class="input-group-prepend">
 											<span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
 										</div>
-										<input name="" class="form-control" placeholder="Email address" type="email">
+										<input class="form-control" placeholder="Email address" type="email" name="email",id="email">
 									</div> <!-- form-group// -->
 									
 									<div class="form-group input-group">
 										<div class="input-group-prepend">
 											<span class="input-group-text"> <i class="fa fa-lock"></i> </span>
 										</div>
-										<input class="form-control" placeholder="Create password" type="password">
+										<input class="form-control" placeholder="Create password" name="password" type="password" id="password">
 									</div> <!-- form-group// -->
 									<div class="form-group">
 										<button type="submit" class="btn btn-primary btn-block"> Login	

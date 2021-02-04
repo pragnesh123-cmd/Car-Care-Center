@@ -1,0 +1,60 @@
+{% include "car/customerbase.html" %}
+<!DOCTYPE html>
+
+{% load static %}
+<html>
+    <head>
+        <title></title>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="{% static  "style.css" %}">
+    </head>
+    <body>
+        <div class="row">
+			<div class="col-12 col-m-12 col-sm-12">
+				<div class="card">
+					<div class="card-header">
+						<h3 style="color:red; text-align:center" >Approved Request With Cost
+						</h3>
+
+					</div>
+					<div class="card-content">
+						<table>
+							<thead>
+                <tr>
+                  <th>Vehicle Name</th>
+                  <th>Vehicle Number</th>
+                  <th>Problem Description</th>
+                  <th>Enquiry Date</th>
+									<th>Total Cost</th>
+					<th>Payment</th>
+                </tr>
+							</thead>
+							<tbody>
+                {% for enq in enquiries %}
+                <tr>
+                  <td>{{enq.vehicle_name}}</td>
+                  <td>{{enq.vehicle_no}}</td>
+                  <td>{{enq.problem_description}}</td>
+                  <td>{{enq.date}}</td>
+                  <td>{{enq.cost}}</td>
+					<td><a href="\payment"> <button type="submit" style="width:80px;height:30px;background-color:#28a745;border-color:#28a745;color:#fff;border-radius:3px;" class="btn btn-success">Pay</button></a></td>
+				</tr>
+
+                {% endfor %}
+
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+<!-- ****** table start ********** -->
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+	</div>
+	<!-- end main content -->
+{% include "car/footer.html" %}
+    </body>
+</html>

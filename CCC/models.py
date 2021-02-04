@@ -23,3 +23,5 @@ class mechanic(models.Model):
     designation = models.CharField(max_length=20)
     address = models.CharField(max_length=100)
     password = models.CharField(max_length=20)
+    user_type_data = (("Admin", "Admin"), ("Mechanic", "Mechanic"), ("Customer", "Customer"))
+    user_type = models.CharField(default="Customer", choices=user_type_data, max_length=10)
