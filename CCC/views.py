@@ -22,6 +22,23 @@ def contactus(request):
 def trackorder(request):
     return render(request,"car/track-order.html")
 
+
+
+
+def changepassword(request):
+    return render(request,"car/change-password.html")
+
+def forgotpassword(request):
+    return render(request,"car/forgotpassword.html")
+
+
+#======================================================================#
+#                  Customer Related Views                              #
+#======================================================================#
+
+def customerbase(request):
+    return render(request,"car/customerindex.html")
+
 def register(request):
     if request.method == 'POST':
         try:
@@ -33,7 +50,8 @@ def register(request):
             lname = request.POST.get('lname')
             email = request.POST.get('email')
             mobile_no = request.POST.get('mobile_no')
-            gender = request.POST.get('gender')
+            gender = request.
+            POST.get('gender')
             address = request.POST.get('address')
             password = request.POST.get('password')
             reg = customer(fname = fname,lname=lname,email=email,mobile_no=mobile_no,gender=gender,address=address,password=password)
@@ -57,38 +75,57 @@ def customerlogin(request):
             return render(request,"car/login.html",{"text":email})           
     else:
             return render(request,"car/login.html")
-
-
-def changepassword(request):
-    return render(request,"car/change-password.html")
-
-def forgotpassword(request):
-    return render(request,"car/forgotpassword.html")
-
-
-#======================================================================#
-#                  Customer Related Views                              #
-#======================================================================#
-
-def customerbase(request):
-    return render(request,"car/customerindex.html")
 def feedback(request):
-    return render(request,"car/feedback.html")
+    if 'user' in request.session:
+        cust = customer.objects.get(fname = request.session['user'])
+        return render(request,"car/feedback.html")
+    else:
+        return render('customerlogin')
 def customer_dashboard(request):
-    return render(request,"car/customer_dashboard.html")
+    if 'user' in request.session:
+        cust = customer.objects.get(fname = request.session['user'])
+        return render(request,"car/customer_dashboard.html" ,{"cust":cust})
+    else:
+        return redirect('customerlogin')
 def invoice(request):
-    return render(request,"car/customer_invoice.html")
+    if 'user' in request.session:
+        cust = customer.objects.get(fname = request.session['user'])
+        return render(request,"car/customer_invoice.html" ,{"cust":cust})
+    else:
+        return redirect('customerlogin')
 def service(request):
-    return render(request,"car/customer_request.html")
+    if 'user' in request.session:
+        cust = customer.objects.get(fname = request.session['user'])
+        return render(request,"car/customer_request.html",{"cust":cust})
+    else:
+        return render('customerlogin')
 def customer_view_request(request):
-    return render(request,"car/customer_view_request.html")
+    if 'user' in request.session:
+        cust = customer.objects.get(fname = request.session['user'])
+        return render(request,"car/customer_view_request.html",{"cust":cust})
+    else:
+        return render('customerlogin')
 def customer_add_request(request):
-    return render(request,"car/customer_add_request.html")
+    if 'user' in request.session:
+        cust = customer.objects.get(fname = request.session['user'])
+        return render(request,"car/customer_add_request.html",{"cust":cust})
+    else:
+        return render('customerlogin')
 def customer_view_approved_request(request):
-    return render(request,"car/customer_view_approved_request.html")
+    if 'user' in request.session:
+        cust = customer.objects.get(fname = request.session['user'])
+        return render(request,"car/customer_vew_approved_request.html",{"cust":cust})
+    else:
+        return render('customerlogin')
 def customer_approved_request_bill(request):
-    return render(request,"car/customer_view_approved_request_bill.html")
+    if 'user' in request.session:
+        cust = customer.objects.get(fname = request.session['user'])
+        return render(request,"car/customer_view_approved_request_bill.html",{"cust":cust})
+    else:
+        return render('customerlogin')
 def customer_logout(request):
-    if user in request.session:
+    if 'user' in request.session:
         del request.session['user']
-    return redirect('customerlogin')
+        return redirect('customerlogin')
+    else:
+        return render(request,"car/customer_dashboard.html") 

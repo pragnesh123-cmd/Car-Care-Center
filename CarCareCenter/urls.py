@@ -40,7 +40,7 @@ urlpatterns = [
     path("customer_view_request",views.customer_view_request),
     path("customer_add_request",views.customer_add_request),
     path("customer_view_approved_request",views.customer_view_approved_request),
-    path("customer_view_approved_bill",views.customer_approved_request_bill),
-    path("customer_logout",views.customer_logout)
+    path("customer_approved_request_bill",views.customer_approved_request_bill),
+    path("customer_logout",views.customer_logout,name="customer_logout"),
    
 ]
