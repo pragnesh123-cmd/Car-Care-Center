@@ -33,14 +33,15 @@ urlpatterns = [
     # Customer Url
     path('customerbase',views.customerbase,name ='customerbase'),
     path('login',views.customerlogin,name='customerlogin'),
-    path("feedback",views.feedback),
     path("customer_dashboard",views.customer_dashboard , name='customer_dashboard'),
     path("invoice" ,views.invoice),
     path("service",views.service),
-    path("customer_view_request",views.customer_view_request),
-    path("customer_add_request",views.customer_add_request),
+    path("customer_view_request",views.customer_view_request,name='customer_view_request'),
+    path("customer_add_request",views.customer_add_request,name='customer_add_request'),
     path("customer_view_approved_request",views.customer_view_approved_request),
     path("customer_approved_request_bill",views.customer_approved_request_bill),
     path("customer_logout",views.customer_logout,name="customer_logout"),
+    path("del_customer_request/<int:id>",views.del_customer_request,name='del_customer_request'),
+    path('customer_feedback',views.customer_feedback),
    
 ]

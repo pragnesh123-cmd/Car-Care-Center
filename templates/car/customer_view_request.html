@@ -3,7 +3,7 @@
 <html>
 
     <head>
-        <title></title>
+        <title>View Request-Car Care Center</title>
         <link rel="stylesheet" href="{% static  "style.css" %}">
     </head>
     <body>
@@ -35,15 +35,15 @@
                         </tr>
                                     </thead>
                                     <tbody>
-                        {% for enq in enquiries %}
+                        {% for enq in enquiry %}
                         <tr>
-                          <td>{{enq.vehicle_name}}</td>
+                          <td>{{enq.name}}</td>
                           <td>{{enq.category}}</td>
-                          <td>{{enq.vehicle_no}}</td>
-                          <td>{{enq.problem_description}}</td>
+                          <td>{{enq.number}}</td>
+                          <td>{{enq.problem}}</td>
                           <td>{{enq.date}}</td>
                           <td>{{enq.status}}</td>
-                          <td><a style="color:blue; text-decoration:none;font-size:25px;"href="{% url 'customer-delete-request' enq.id  %}">&#10008;</a></td>
+                          <td><a style="color:blue; text-decoration:none;font-size:25px;" href="{% url 'del_customer_request' enq.id %}">&#10008;</a></td>
                         </tr>
                         {% endfor %}
         

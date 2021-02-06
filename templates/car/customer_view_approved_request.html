@@ -2,7 +2,7 @@
 {% load static %}
 <html>
     <head>
-        <title></title>
+        <title>Approved Request-Car Care Center</title>
         <link rel="stylesheet" href="{% static  "style.css" %}">
     </head>
     {% include "car/customerbase.html" %}
@@ -34,12 +34,12 @@
                         </tr>
                                     </thead>
                                     <tbody>
-                        {% for enq in enquiries %}
+                        {% for enq in enquiry %}
                         <tr>
-                          <td>{{enq.vehicle_name}}</td>
+                          <td>{{enq.name}}</td>
                           <td>{{enq.category}}</td>
-                          <td>{{enq.vehicle_no}}</td>
-                          <td>{{enq.problem_description}}</td>
+                          <td>{{enq.number}}</td>
+                          <td>{{enq.problem}}</td>
                           <td>{{enq.date}}</td>
                           <td>{{enq.status}}</td>
                           

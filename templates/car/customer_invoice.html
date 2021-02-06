@@ -4,6 +4,7 @@
 {% load static %}
 <html>
     <head>
+		<script>window.document.title="Customer Invoice-Car Care Center";</script>
         <title></title>
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -32,14 +33,14 @@
                 </tr>
 							</thead>
 							<tbody>
-                {% for enq in enquiries %}
+                {% for enq in enquiry %}
                 <tr>
-                  <td>{{enq.vehicle_name}}</td>
-                  <td>{{enq.vehicle_no}}</td>
-                  <td>{{enq.problem_description}}</td>
+                  <td>{{enq.name}}</td>
+                  <td>{{enq.number}}</td>
+                  <td>{{enq.problem}}</td>
                   <td>{{enq.date}}</td>
                   <td>{{enq.cost}}</td>
-					<td><a href="\payment"> <button type="submit" style="width:80px;height:30px;background-color:#28a745;border-color:#28a745;color:#fff;border-radius:3px;" class="btn btn-success">Pay</button></a></td>
+					<td><a href="#"> <button type="submit" style="width:80px;height:30px;background-color:#28a745;border-color:#28a745;color:#fff;border-radius:3px;" class="btn btn-success">Pay</button></a></td>
 				</tr>
 
                 {% endfor %}

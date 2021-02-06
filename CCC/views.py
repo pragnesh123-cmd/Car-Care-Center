@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
 from .models import *
+from django.db.models import Sum
 
 
 # Create your views here.
@@ -49,12 +50,11 @@ def register(request):
             fname = request.POST.get('fname')
             lname = request.POST.get('lname')
             email = request.POST.get('email')
-            mobile_no = request.POST.get('mobile_no')
-            gender = request.
-            POST.get('gender')
+            mobile = request.POST.get('mobile_no')
+            gender = request.POST.get('gender')
             address = request.POST.get('address')
             password = request.POST.get('password')
-            reg = customer(fname = fname,lname=lname,email=email,mobile_no=mobile_no,gender=gender,address=address,password=password)
+            reg = customer(fname = fname,lname=lname,email=email,mobile=mobile,gender=gender,address=address,password=password)
             reg.save()
             text = "You have Successfully Registred!"
             return render(request,"car/customerregister.html",{"text":text})
@@ -73,56 +73,112 @@ def customerlogin(request):
         except:
             email = "invalid Login Credintials"
             return render(request,"car/login.html",{"text":email})           
+    else:   
+        return render(request,"car/login.html")
+def customer_feedback(request):
+    if request.method == 'POST':    
+        if 'user' in request.session:
+            cust = customer.objects.get(fname = request.session['user'])
+            username = request.POST.get('username')
+            email = request.POST.get('email')
+            msg = request.POST.get('msg')
+            feed = feedback(username=username,email=email,msg=msg)
+            feed.save()
+            return render(request,"car/feedback.html",{'user':cust})
+        else:
+            return redirect('customerlogin')     
+
     else:
-            return render(request,"car/login.html")
-def feedback(request):
-    if 'user' in request.session:
-        cust = customer.objects.get(fname = request.session['user'])
-        return render(request,"car/feedback.html")
-    else:
-        return render('customerlogin')
+        if 'user' in request.session:
+            cust = customer.objects.get(fname = request.session['user'])
+            return render(request,"car/feedback.html",{'user':cust})
+        else:
+            return redirect('customerlogin')
+   
+from django.db.models import Q
 def customer_dashboard(request):
     if 'user' in request.session:
         cust = customer.objects.get(fname = request.session['user'])
-        return render(request,"car/customer_dashboard.html" ,{"cust":cust})
+        count_req = cus_request.objects.filter(Customer_id=cust.id).count()
+        work_in_progress = cus_request.objects.all().filter(Customer_id = cust.id,status='Repairing').count()
+        work_in_completed = cus_request.objects.all().filter(Customer_id = cust.id).filter(Q(status='Repairing Done') | Q(status = 'Released')).count
+        bill = cus_request.objects.all().filter(Customer_id = cust.id).filter(Q(status='Repairing Done') | Q(status = 'Released')).aggregate(Sum('cost'))
+        dict = {
+            "user":cust,
+            "count_req":count_req,
+            'work_in_progress':work_in_progress,
+            'work_in_completed':work_in_completed,
+            'bill': bill['cost__sum']
+        }
+        return render(request,"car/customer_dashboard.html" ,context=dict)
     else:
         return redirect('customerlogin')
 def invoice(request):
     if 'user' in request.session:
         cust = customer.objects.get(fname = request.session['user'])
-        return render(request,"car/customer_invoice.html" ,{"cust":cust})
+        enquiry = cus_request.objects.all().filter(Customer_id = cust.id).exclude(status = 'Pending')
+        return render(request,"car/customer_invoice.html" ,{"user":cust,'enquiry':enquiry})
     else:
         return redirect('customerlogin')
 def service(request):
     if 'user' in request.session:
         cust = customer.objects.get(fname = request.session['user'])
-        return render(request,"car/customer_request.html",{"cust":cust})
+        return render(request,"car/customer_request.html",{"user":cust})
     else:
         return render('customerlogin')
 def customer_view_request(request):
     if 'user' in request.session:
         cust = customer.objects.get(fname = request.session['user'])
-        return render(request,"car/customer_view_request.html",{"cust":cust})
+        enqiry = cus_request.objects.all().filter(Customer_id = cust.id, status="Pending")
+        return render(request, "car/customer_view_request.html",{"user":cust,"enquiry":enqiry})
     else:
         return render('customerlogin')
+
 def customer_add_request(request):
-    if 'user' in request.session:
-        cust = customer.objects.get(fname = request.session['user'])
-        return render(request,"car/customer_add_request.html",{"cust":cust})
+    if request.method == 'POST':
+        if 'user' in request.session:
+            cust = customer.objects.get(fname=request.session['user'])
+            category = request.POST.get('category')
+            number = request.POST.get('number')
+            name = request.POST.get('name')
+            brand = request.POST.get('brand')
+            model = request.POST.get('model')
+            problem = request.POST.get('problem')
+            cust = customer.objects.get(fname=request.session['user'])
+            req = cus_request(category=category,number=number,name=name,brand=brand,model=model,problem=problem,Customer_id=cust.id)
+            req.save()
+            return render(request,"car/customer_add_request.html",{"user":cust})
+        else:
+            return redirect("customerlogin")
     else:
-        return render('customerlogin')
+        if 'user' in request.session:
+            cust = customer.objects.get(fname=request.session['user'])
+            return render(request,"car/customer_add_request.html",{"user":cust})
+        else:
+            return redirect("customerlogin")
+
 def customer_view_approved_request(request):
     if 'user' in request.session:
         cust = customer.objects.get(fname = request.session['user'])
-        return render(request,"car/customer_vew_approved_request.html",{"cust":cust})
+        enqiry = cus_request.objects.all().filter(Customer_id = cust.id, status="Approved")
+        return render(request,"car/customer_view_approved_request.html",{"user":cust,"enquiry":enqiry})
     else:
         return render('customerlogin')
 def customer_approved_request_bill(request):
     if 'user' in request.session:
         cust = customer.objects.get(fname = request.session['user'])
-        return render(request,"car/customer_view_approved_request_bill.html",{"cust":cust})
+        enqiry = cus_request.objects.all().filter(Customer_id = cust.id).exclude(status='Pending')
+        return render(request,"car/customer_view_approved_request_bill.html",{"user":cust,"enquiry":enqiry})
     else:
         return render('customerlogin')
+
+def del_customer_request(request,id):
+    if 'user' in request.session:
+        cust = customer.objects.get(fname = request.session['user'])
+        enquiry = cus_request.objects.get(id = id)
+        enquiry.delete()
+        return redirect('customer_view_request')
+
 def customer_logout(request):
     if 'user' in request.session:
         del request.session['user']

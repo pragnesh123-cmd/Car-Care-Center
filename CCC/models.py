@@ -7,21 +7,47 @@ class customer(models.Model):
     fname = models.CharField(max_length=30)
     lname = models.CharField(max_length=30)
     email = models.EmailField()
-    mobile_no = models.CharField(max_length=20)
+    mobile = models.CharField(max_length=20)
     gender = models.CharField(max_length=7)
     address = models.CharField(max_length=100)
     password = models.CharField(max_length=20)
-    user_type_data = (("Admin", "Admin"), ("Mechanic", "Mechanic"), ("Customer", "Customer"))
-    user_type = models.CharField(default="Customer", choices=user_type_data, max_length=10)
+
+
+    def __str__(self):
+        return self.fname   
 
 
 class mechanic(models.Model):
-    fname = models.CharField(max_length=30)
-    lname = models.CharField(max_length=30)
+    fname = models.CharField(max_length=20)
+    lname = models.CharField(max_length=20)
     email = models.EmailField()
-    gender = models.CharField(max_length=7)
+    mobile = models.CharField(max_length=10)
+    gender = models.CharField(max_length=20)
     designation = models.CharField(max_length=20)
-    address = models.CharField(max_length=100)
+    salary = models.FloatField(max_length=10)
+    address = models.CharField(max_length=50)
     password = models.CharField(max_length=20)
-    user_type_data = (("Admin", "Admin"), ("Mechanic", "Mechanic"), ("Customer", "Customer"))
-    user_type = models.CharField(default="Customer", choices=user_type_data, max_length=10)
+
+    def __str__(self):
+        return self.fname
+
+
+class cus_request(models.Model):
+    category = models.CharField(max_length=40)
+    number = models.CharField(max_length=100)
+    name = models.CharField(max_length=40)
+    brand = models.CharField(max_length=40)
+    model = models.CharField(max_length=40)
+    problem = models.CharField(max_length=100)
+    date = models.DateField(auto_now=True)
+    cost = models.PositiveIntegerField(null = True)
+    Customer = models.ForeignKey('customer',on_delete=models.CASCADE,null=True)
+    Mechanic = models.ForeignKey('mechanic',on_delete=models.CASCADE,null=True)
+    stat = (('Pending','Pending'),('Approved','Approved'),('Repairing','Repairing'),('Repairing Done','Repairing Done'),('Released','Released'))
+    status = models.CharField(max_length=40,choices=stat,default='Pending',null=True)
+
+class feedback(models.Model):
+    username = models.CharField(max_length=40)
+    email = models.CharField(max_length=50)
+    msg = models.CharField(max_length=100)
+    date = models.DateField(auto_now=True)

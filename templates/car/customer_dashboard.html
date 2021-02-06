@@ -5,7 +5,11 @@
 
 
 <head>
-	<title></title>
+	<script>window.document.title="Customer Dashboard-Car Care Center";</script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta name="format-detection" content="telephone=no">
+	<title>Customet Dashboard — Car Service Center</title>
 	<!-- CSS only -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
@@ -26,6 +30,7 @@
 		}
 	</style>
 
+
 </head>
 
 <body>
@@ -41,7 +46,7 @@
 					<p>
 						<i class="fas fa-tasks"></i>
 					</p>
-					<h3></h3>
+					<h3>{{count_req}}</h3>
 					<p>New Request Made</p>
 				</div>
 			</div>
@@ -50,7 +55,7 @@
 					<p>
 						<i class="fas fa-spinner"></i>
 					</p>
-					<h3></h3>
+					<h3>{{work_in_progress}}</h3>
 					<p>Vehicle Repair In Progress</p>
 				</div>
 			</div>
@@ -59,7 +64,7 @@
 					<p>
 						<i class="fas fa-check-circle"></i>
 					</p>
-					<h3></h3>
+					<h3>{{work_in_completed}}</h3>
 					<p>Vehicle Repaired</p>
 				</div>
 			</div>
