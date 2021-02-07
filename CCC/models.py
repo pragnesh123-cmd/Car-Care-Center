@@ -27,6 +27,7 @@ class mechanic(models.Model):
     salary = models.FloatField(max_length=10)
     address = models.CharField(max_length=50)
     password = models.CharField(max_length=20)
+    
 
     def __str__(self):
         return self.fname

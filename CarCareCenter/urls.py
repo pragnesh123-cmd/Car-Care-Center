@@ -43,5 +43,15 @@ urlpatterns = [
     path("customer_logout",views.customer_logout,name="customer_logout"),
     path("del_customer_request/<int:id>",views.del_customer_request,name='del_customer_request'),
     path('customer_feedback',views.customer_feedback),
+
+    #Mechanic URL
+
+    path('mechaniclogin',views.mechaniclogin,name='mechaniclogin'),
+    path('mechanic_base',views.mechanic_base,name='mechanic_base'),
+    path('mechanicindex',views.mechanicindex,name = 'mechanicindex'),
+    path('mechanic_service',views.mechanic_service,name='mechanic_service'),
+    path('mechanic_feedback',views.mechanic_feedback,name='mechanic_feedback'),
+    path('mechanic_update_status/<int:id>',views.mechanic_update_status,name='mechanic_update_status'),
+    path('mechanic_logout',views.mechanic_logout)
    
 ]

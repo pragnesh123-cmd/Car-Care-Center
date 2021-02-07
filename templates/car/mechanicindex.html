@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+<!-- Mirrored from red-parts.html.themeforest.scompiler.ru/themes/red-ltr/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 25 Jan 2021 07:33:59 GMT -->
+
+<head>
+	<style>
+
+		.hovernow {
+		  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+		  transition: box-shadow 0.3s ease-in-out;
+		  margin-left: 10px;
+		  margin-right: 10px;
+		}
+		
+		.hovernow:hover {
+		  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
+		}
+	</style>
+<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<meta name="format-detection" content="telephone=no">
+		<title>Car Care Center</title>
+		<!-- css -->
+		
+		<link rel="stylesheet" href="{% static "style.css" %}"
+			<!-- Custom fonts for this template-->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-97489509-8"></script>
+		<script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag("js", new Date()); gtag("config", "UA-97489509-8");</script>
+	</head>
+
+<body>
+	{% include "car/mechanicbase.html" %}
+	
+	<div class="wrapper">
+
+		<!-- ****** cards start ********** -->
+				<div class="row">
+					<div class="row-3 col-3 col-m-3 col-sm-3">
+						<div class="counter bg-primary hovernow">
+							<p>
+								<i class="fas fa-tasks"></i>
+							</p>
+							<h6></h6>
+							<p>New Work Assigned</p>
+						</div>
+					</div>
+					<div class="col-3 col-m-3 col-sm-3">
+						<div class="counter bg-warning hovernow">
+							<p>
+								<i class="fas fa-spinner"></i>
+							</p>
+							<h3></h3>
+							<p>Work In Progress</p>
+						</div>
+					</div>
+					<div class="col-3 col-m-3 col-sm-3">
+						<div class="counter bg-success hovernow">
+							<p>
+								<i class="fas fa-check-circle"></i>
+							</p>
+							<h3></h3>
+							<p>Work Completed</p>
+						</div>
+					</div>
+					<div class="col-3 col-m-3 col-sm-3">
+						<div class="counter bg-danger hovernow">
+							<p>
+								<i class="fas fa-rupee-sign"></i>
+							</p>
+							<h3></h3>
+							<p>Salary</p>
+						</div>
+					</div>
+				</div>
+				<marquee onmouseover="this.stop();" onmouseout="this.start();" scrollamount=4 behavior="scroll" direction="left">
+					<img src="{% static "images/ferrari.png" %}" width="120" height="80" alt="ferrari" />
+					   <img src="{% static "images/ford.png" %}" width="120" height="80" alt="ford" />
+					<img src="{% static "images/lambo.png" %}" width="120" height="80" alt="lambo" />
+					<img src="{% static "images/mahindra.png" %}" width="120" height="80" alt="mahindra" />
+					<img src="{% static "images/tvs.png" %}" width="120" height="80" alt="tvs" />
+					<img src="{% static "images/tata.png" %}" width="120" height="80" alt="tata" />
+					<img src="{% static "images/hero.png" %}" width="120" height="80" alt="hero" />
+					<img src="{% static "images/rolls.png" %}" width="120" height="80" alt="rolls" />
+					<img src="{% static "images/suzuki.png" %}" width="120" height="80" alt="suzuki" />
+				</marquee>
+		<!-- site__body -->
+	</div>
+
+	<!-- site / end -->
+	<!-- mobile-menu -->
+	<!-- mobile-menu / end -->
+	<!-- quickview-modal -->
+	<!-- quickview-modal / end -->
+	<!-- add-vehicle-modal -->
+	<!-- add-vehicle-modal / end -->
+	<!-- vehicle-picker-modal -->
+	<!-- vehicle-picker-modal / end -->
+	<!-- photoswipe -->
+	<!-- photoswipe / end -->
+	<!-- scripts -->
+	<script src="{% static " vendor/jquery/jquery.min.js" %}"></script>
+	<script src="{% static " vendor/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+	<script src="{% static " vendor/owl-carousel/owl.carousel.min.js" %}"></script>
+	<script src="{% static " vendor/nouislider/nouislider.min.js" %}"></script>
+	<script src="{% static " vendor/photoswipe/photoswipe.min.js" %}"></script>
+	<script src="{% static " vendor/photoswipe/photoswipe-ui-default.min.js" %}"></script>
+	<script src="{% static " vendor/select2/js/select2.min.js" %}"></script>
+	<script src="{% static " js/number.js" %}"></script>
+	<script src="{% static " js/main.js" %}"></script>
+	{% include "car/footer.html" %}
+</body>
+<!-- Mirrored from red-parts.html.themeforest.scompiler.ru/themes/red-ltr/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 25 Jan 2021 07:34:41 GMT -->
+
+</html>

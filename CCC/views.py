@@ -185,3 +185,84 @@ def customer_logout(request):
         return redirect('customerlogin')
     else:
         return render(request,"car/customer_dashboard.html") 
+
+
+#======================================================#
+#  Mechanic Login                                      #
+#======================================================#
+
+def mechaniclogin(request):
+    if request.method == 'POST':
+        try:
+            email = request.POST.get('email')
+            password = request.POST.get('password')
+            mec =  mechanic.objects.get(email=email,password=password)
+            if mec:   
+                request.session['mec'] = mec.fname
+                return redirect('mechanicindex')
+        except:
+            email = "invalid Login Credintials"
+            return render(request,"car/mechaniclogin.html",{"text":email})           
+    else:   
+        return render(request,"car/mechaniclogin.html")
+    
+def mechanicindex(request):
+    if 'mec' in request.session:
+        user = mechanic.objects.get(fname = request.session['mec'])
+        return render(request,"car/mechanicindex.html",{'mech':user})
+    else:
+        return redirect('mechaniclogin')
+
+
+def mechanic_base(request):
+        return render(request,"car/mechanicbase.html")
+    
+def mechanic_service(request):
+    if 'mec' in request.session:
+        user = mechanic.objects.get(fname = request.session['mec'])
+        enquiry = cus_request.objects.all().filter(Mechanic_id = user.id)
+        return render(request,"car/mechanicservice.html",{"mech":user,"work":enquiry})
+    else:
+        return redirect('mechaniclogin')
+
+def mechanic_feedback(request):
+    if request.method == 'POST':
+        if 'mec' in request.session:
+            user = mechanic.objects.get(fname = request.session['mec'])
+            username = request.POST.get('username')
+            email = request.POST.get('email')
+            msg = request.POST.get('msg')
+            feed = feedback(username=username,email=email,msg=msg)
+            feed.save()
+            return render(request,'car/mechanic_feedback.html',{"mech":user})
+        else:
+            return redirect('mechaniclogin')
+    else:
+        if  'mec' in request.session:
+            user = mechanic.objects.get(fname = request.session['mec'])
+            return render(request,"car/mechanic_feedback.html",{"mech":user})
+        else:
+            return redirect('mechaniclogin') 
+
+
+def mechanic_update_status(request,id):
+    if request.method == 'POST':
+        if 'mec' in request.session:
+            user = mechanic.objects.get(fname = request.session['mec'])
+            status = request.POST.get('status')
+            cus_request.objects.filter(Mechanic_id=user.id).update(status=status)
+            mech = cus_request.objects.all()
+            return render(request,'car/mechanicservice.html',{"mech":user,"work":mech})
+        else:
+            return redirect('mechaniclogin')
+    else:
+        if 'mec' in request.session:
+            user = mechanic.objects.get(fname = request.session['mec'])
+            return render(request,'car/mechanic_update_status.html',{'mech':user})
+        else:
+            return redirect('mechanic_service')
+
+def mechanic_logout(request):
+    if 'mec' in request.session:
+        del request.session['mec']
+        return redirect('mechaniclogin')
