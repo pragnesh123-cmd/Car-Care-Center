@@ -179,6 +179,12 @@ def del_customer_request(request,id):
         enquiry.delete()
         return redirect('customer_view_request')
 
+def customer_profile(request):
+    if 'user' in request.session:
+        cust = customer.objects.get(fname = request.session['user'])
+        return render(request,"car/customer_profile.html",{'user':cust})
+
+
 def customer_logout(request):
     if 'user' in request.session:
         del request.session['user']
@@ -252,14 +258,14 @@ def mechanic_update_status(request,id):
             status = request.POST.get('status')
             cus_request.objects.filter(Mechanic_id=user.id).update(status=status)
             mech = cus_request.objects.all()
-            return render(request,'car/mechanicservice.html',{"mech":user,"work":mech})
+            return HttpResponseRedirect(request,'car/mechanicservice.html',{"mech":user,"work":mech})
         else:
             return redirect('mechaniclogin')
     else:
         if 'mec' in request.session:
             user = mechanic.objects.get(fname = request.session['mec'])
             return render(request,'car/mechanic_update_status.html',{'mech':user})
-        else:
+        else:  
             return redirect('mechanic_service')
 
 def mechanic_logout(request):

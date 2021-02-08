@@ -43,6 +43,7 @@ urlpatterns = [
     path("customer_logout",views.customer_logout,name="customer_logout"),
     path("del_customer_request/<int:id>",views.del_customer_request,name='del_customer_request'),
     path('customer_feedback',views.customer_feedback),
+    path('customer_profile',views.customer_profile),
 
     #Mechanic URL
 
