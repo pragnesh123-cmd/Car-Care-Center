@@ -52,3 +52,8 @@ class feedback(models.Model):
     email = models.CharField(max_length=50)
     msg = models.CharField(max_length=100)
     date = models.DateField(auto_now=True)
+
+class contact(models.Model):
+    name = models.CharField(max_length=40)
+    email = models.EmailField()
+    msg  = models.CharField(max_length=100)

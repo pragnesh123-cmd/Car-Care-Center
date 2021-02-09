@@ -27,7 +27,7 @@ urlpatterns = [
     path('trackorder/',views.trackorder),
     path('register/',views.register),
     # path('customerbase',views.customerlogin),
-    path('changepassword',views.changepassword),
+    path('changepassword',views.changepassword,name="changepassword"),
     path('forgotpassword',views.forgotpassword),
 
     # Customer Url
@@ -44,6 +44,9 @@ urlpatterns = [
     path("del_customer_request/<int:id>",views.del_customer_request,name='del_customer_request'),
     path('customer_feedback',views.customer_feedback),
     path('customer_profile',views.customer_profile),
+    path('forgotpassword',views.forgotpassword,name='forgotpassword'),
+    path('check_otp',views.check_otp,name="check_otp"),
+    path('forgotpasschange',views.forgotpasschange,name="forgotpasschange"),
 
     #Mechanic URL
 
@@ -53,6 +56,6 @@ urlpatterns = [
     path('mechanic_service',views.mechanic_service,name='mechanic_service'),
     path('mechanic_feedback',views.mechanic_feedback,name='mechanic_feedback'),
     path('mechanic_update_status/<int:id>',views.mechanic_update_status,name='mechanic_update_status'),
-    path('mechanic_logout',views.mechanic_logout)
+    path('mechanic_logout',views.mechanic_logout),
    
 ]

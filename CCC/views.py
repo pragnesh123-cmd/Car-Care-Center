@@ -1,6 +1,12 @@
 from django.shortcuts import render,redirect
 from .models import *
 from django.db.models import Sum
+import math
+import random
+import smtplib
+from django.core.mail import send_mail
+from django.conf import settings
+
 
 
 # Create your views here.
@@ -18,20 +24,42 @@ def aboutus(request):
     return render(request,"car/about-us.html")
 
 def contactus(request):
-    return render(request, "car/contact-us.html")
-
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        msg = request.POST.get('msg')
+        contacts = contact(name=name,email=email,msg=msg)
+        contacts.save()
+        return render(request,"car/contact-us.html")
+    else:
+        return render(request,"car/contact-us.html")
+         
 def trackorder(request):
     return render(request,"car/track-order.html")
-
-
-
 
 def changepassword(request):
     return render(request,"car/change-password.html")
 
-def forgotpassword(request):
-    return render(request,"car/forgotpassword.html")
+def check_otp(request):
+    if request.method == 'POST':
+        otppass = request.POST.get('otppass')
+        if otppass==request.session['otp']:
+            return redirect('forgotpasschange')
+        else:
+            text = "you have entered wrong otp..!"
+            return render(request,'car/otp_check.html',{'otp':text})
+    else:   
+        return render(request,"car/otp_check.html")
 
+def forgotpasschange(request):
+    if request.method == 'POST':
+        newpass = request.POST.get('newpass')
+        customer.objects.all().filter(email = request.session['email']).update(password=newpass)
+        del request.session['email']
+        text = 'Your Password has Succesfully Change!'
+        return redirect('customerlogin')
+    else:
+        return render(request,'car/forgot_password_change.html')
 
 #======================================================================#
 #                  Customer Related Views                              #
@@ -178,12 +206,31 @@ def del_customer_request(request,id):
         enquiry = cus_request.objects.get(id = id)
         enquiry.delete()
         return redirect('customer_view_request')
-
+ 
 def customer_profile(request):
     if 'user' in request.session:
         cust = customer.objects.get(fname = request.session['user'])
         return render(request,"car/customer_profile.html",{'user':cust})
 
+def forgotpassword(request):
+    if request.method == 'POST': 
+        try:
+            useremail = request.POST.get('email')
+            mail = customer.objects.get(email = useremail) 
+            
+            num = "1234567890"
+            otp = ''
+            for i in range(4):
+                otp += num[math.floor(random.random() * 10)]
+            request.session['email'] = mail.email
+            request.session['otp'] = otp
+            send_mail('Forgot Password(car care Center)', f'otp is {otp}', 'gohilbhavesh1997@gmail.com', [f'{useremail}'])
+            return redirect('check_otp')   
+        except:
+            text = "Email is not Registered!"
+            return render(request,'car/forgot_password.html',{'mail':text})
+    else:   
+        return render(request,'car/forgot_password.html')
 
 def customer_logout(request):
     if 'user' in request.session:
@@ -191,6 +238,8 @@ def customer_logout(request):
         return redirect('customerlogin')
     else:
         return render(request,"car/customer_dashboard.html") 
+
+
 
 
 #======================================================#

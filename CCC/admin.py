@@ -19,4 +19,10 @@ admin.site.register(feedback, feedbackadmin)
 class cust_reqadmin(admin.ModelAdmin):
     list_display = ('category','number','name','brand','model','problem','date','cost','status')
 
+
 admin.site.register(cus_request, cust_reqadmin)
+
+class contactadmin(admin.ModelAdmin):
+    list_display=('name','email','msg')
+
+admin.site.register(contact,contactadmin)
