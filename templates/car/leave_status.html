@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <title>Car Care Center-Leave Status</title>
+        <link rel="stylesheet" href="{% static  "style.css" %}">
+    </head>
+    <body>
+        {% include "car/mechanicbase.html" %}
+        	<!-- main content -->
+	<div class="wrapper">
+
+        <!-- ****** table  start ********** -->
+                <div class="row">
+                    <div class="col-12 col-m-12 col-sm-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 style="color:red; text-align:center" >Applied Leave Status
+                                </h3>
+        
+                            </div>
+                            <div class="card-content">
+                                <table>
+                                    <thead>
+                        <tr>
+                          <th>Leave Reason</th>
+        
+                          <th>From Date</th>
+        
+                          <th>To Date</th>
+                          <th>Status</th>
+                          {% for enq in leave_stat %}
+                          {% if enq.status == 'Rejected' %}
+                            <th>Admin Reason</th>
+                        {% endif %}
+                        {% endfor %}
+                        </tr>
+                                    </thead>
+                                    <tbody>
+                        {% for enq in leave_stat %}
+                        <tr>
+                          <td>{{enq.reason}}</td>
+        
+                          <td>{{enq.from_date}}</td>
+        
+                          <td>{{enq.to_date}}</td>
+                        {% if enq.status == "Pending" %}
+                            <td class="text-warning">{{enq.status}}</td>
+                        {% elif enq.status == "Approved" %}
+                            <td class="text-success">{{enq.status}}</td> 
+                        {% elif enq.status == "Rejected" %}
+                            <td class="text-danger">{{enq.status}}</td> 
+                        {% endif %}  
+                        {% if enq.status == 'Rejected' %}
+                            <td>{{enq.admin_reason}}</td>
+                        {% endif %}
+                          </tr>
+                        {% endfor %}
+        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>  
+                {% include "car/footer.html" %}
+    </body>
+</html>

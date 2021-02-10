@@ -43,7 +43,8 @@ urlpatterns = [
     path("customer_logout",views.customer_logout,name="customer_logout"),
     path("del_customer_request/<int:id>",views.del_customer_request,name='del_customer_request'),
     path('customer_feedback',views.customer_feedback),
-    path('customer_profile',views.customer_profile),
+    path("customer_profile",views.customer_profile),
+    path('cust_edit_profile',views.cust_edit_profile,name="cust_edit_profile"),
     path('forgotpassword',views.forgotpassword,name='forgotpassword'),
     path('check_otp',views.check_otp,name="check_otp"),
     path('forgotpasschange',views.forgotpasschange,name="forgotpasschange"),
@@ -57,5 +58,8 @@ urlpatterns = [
     path('mechanic_feedback',views.mechanic_feedback,name='mechanic_feedback'),
     path('mechanic_update_status/<int:id>',views.mechanic_update_status,name='mechanic_update_status'),
     path('mechanic_logout',views.mechanic_logout),
+    path('mechanic_leave',views.mechanic_leave,name='mechanic_leave'),
+    path('mechanic_leave_form',views.mechanic_leave_form,name='mechanic_leave_form'),
+    path('leave_status',views.leave_status,name='leave_status'),
    
 ]

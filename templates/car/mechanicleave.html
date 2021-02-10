@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-{% include "car/customerbase.html" %}
+{% include "car/mechanicbase.html" %}
 {% load static %}
 <html>
 
 <head>
-    
     <script>window.document.title="Service-Car Care Center";</script>
-    <link rel="stylesheet" href="{% static  "style.css" %}">
 
     <style type="text/css">
         .hovernow {
@@ -88,22 +86,10 @@
     <div style="margin-left:100px;" class="container">
         <div class="row">
             <div class="col-md-4 col-xl-3">
-                <div class="card bg-c-blue order-card">
-                    <div class="card-block hovernow">
-                        <a href="/customer_view_request">
-                            <h6 class="m-b-20">View Pending Request</h6>
-                        </a>
-                        <h2 class="text-right"><i class="fas fa-eye f-left"></i></h2>
-                        <br>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 col-xl-3">
                 <div class="card bg-c-green order-card">
                     <div class="card-block hovernow">
-                        <a href="/customer_add_request">
-                            <h6 class="m-b-20">Make Request</h6>
+                        <a href="/mechanic_leave_form">
+                            <h6 class="m-b-20">Apply Leave</h6>
                         </a>
                         <h2 class="text-right"><i class="fas fa-plus-circle f-left"></i></h2>
                         <br>
@@ -114,22 +100,10 @@
             <div class="col-md-4 col-xl-3">
                 <div class="card bg-c-yellow order-card">
                     <div class="card-block hovernow">
-                        <a href="/customer_view_approved_request">
-                            <h6 class="m-b-20">Approved Request</h6>
+                        <a href="/leave_status">
+                            <h6 class="m-b-20">Status Of Applied Leave</h6>
                         </a>
-                        <h2 class="text-right"><i class="fas fa-check-circle f-left"></i></h2>
-                        <br>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 col-xl-3">
-                <div class="card bg-c-pink order-card">
-                    <div class="card-block hovernow">
-                        <a href="/customer_approved_request_bill">
-                            <h6 class="m-b-20">Approved Request Bill</h6>
-                        </a>
-                        <h2 class="text-right"><i class="fas fa-rupee-sign f-left"></i></h2>
+                        <h2 class="text-right"><i class="fas fa-eye f-left"></i></h2>
                         <br>
                     </div>
                 </div>

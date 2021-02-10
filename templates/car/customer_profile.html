@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en" dir="ltr">
 <!-- Mirrored from red-parts.html.themeforest.scompiler.ru/themes/red-ltr/account-dashboard.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 25 Jan 2021 07:35:36 GMT -->
 
@@ -6,21 +7,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="format-detection" content="telephone=no">
-    <title>Account Dashboard — Red Parts</title>
-    <link rel="icon" type="image/png" href="images/favicon.png">
+    <title>Car Care Center</title>
+    <link rel="icon" type="image/png" href="{% static " images/favicon.png " %}">
     <!-- fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700,700i">
     <!-- css -->
-    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.css">
-    <link rel="stylesheet" href="vendor/owl-carousel/assets/owl.carousel.min.css">
-    <link rel="stylesheet" href="vendor/photoswipe/photoswipe.css">
-    <link rel="stylesheet" href="vendor/photoswipe/default-skin/default-skin.css">
-    <link rel="stylesheet" href="vendor/select2/css/select2.min.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/style.header-spaceship-variant-one.css" media="(min-width: 1200px)">
-    <link rel="stylesheet" href="css/style.mobile-header-variant-one.css" media="(max-width: 1199px)">
+    <link rel="stylesheet" href="{% static  "vendor/bootstrap/css/bootstrap.css " %}">
+    <link rel="stylesheet" href="{% static "vendor/owl-carousel/assets/owl.carousel.min.css " %}">
+    <link rel="stylesheet" href="{% static "vendor/photoswipe/photoswipe.css " %}">
+    <link rel="stylesheet" href="{% static "vendor/photoswipe/default-skin/default-skin.css " %}">
+    <link rel="stylesheet" href="{% static "vendor/select2/css/select2.min.css " %}">
+    <link rel="stylesheet" href="{% static "css/style.css " %}">
+    <link rel="stylesheet" href="{% static "css/style.header-spaceship-variant-one.css " %}" media="(min-width: 1200px)">
+    <link rel="stylesheet" href="{% static "css/style.mobile-header-variant-one.css " %}" media="(max-width: 1199px)">
     <!-- font - fontawesome -->
-    <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="{% static "vendor/fontawesome/css/all.min.css " %}">
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-97489509-8"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -30,6 +31,7 @@
         }
         gtag("js", new Date());
         gtag("config", "UA-97489509-8");
+
     </script>
 </head>
 
@@ -47,50 +49,34 @@
             <div class="block">
                 <div class="container container--max--xl">
                     <div class="row">
-                        <div class="col-12 col-lg-3 d-flex">
-                            <div class="account-nav flex-grow-1">
-                                <h4 class="account-nav__title">Navigation</h4>
-                                <ul class="account-nav__list">
-                                    <li class="account-nav__item account-nav__item--active"><a href="account-dashboard.html">Dashboard</a></li>
-                                    <li class="account-nav__item"><a href="account-garage.html">Garage</a></li>
-                                    <li class="account-nav__item"><a href="account-profile.html">Edit Profile</a></li>
-                                    <li class="account-nav__item"><a href="account-orders.html">Order History</a></li>
-                                    <li class="account-nav__item"><a href="account-order-details.html">Order Details</a>
-                                    </li>
-                                    <li class="account-nav__item"><a href="account-addresses.html">Addresses</a></li>
-                                    <li class="account-nav__item"><a href="account-edit-address.html">Edit Address</a>
-                                    </li>
-                                    <li class="account-nav__item"><a href="account-password.html">Password</a></li>
-                                    <li class="account-nav__divider" role="presentation"></li>
-                                    <li class="account-nav__item"><a href="account-login.html">Logout</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-9 mt-4 mt-lg-0">
+                        <div class="col-12 col-lg-12 mt-4 mt-lg-0">
                             <div class="dashboard">
                                 <div class="dashboard__profile card profile-card">
                                     <div class="card-body profile-card__body">
-                                        <div class="profile-card__avatar"><img src="images/avatars/avatar-4.jpg" alt="">
+                                        <div class="profile-card__avatar"><img src="{% static "images/avatars/avatar-4.jpg" %}" alt="">
                                         </div>
-                                        <div class="profile-card__name">Helena Garcia</div>
-                                        <div class="profile-card__email">red-parts@example.com</div>
-                                        <div class="profile-card__edit"><a href="account-profile.html" class="btn btn-secondary btn-sm">Edit Profile</a></div>
+                                        <div class="profile-card__name">{{stu.fname}}</div>
+                                        <div class="profile-card__email">{{stu.email}}</div>
+                                        <div class="profile-card__edit"><a href="/cust_edit_profile" class="btn btn-secondary btn-sm">Edit Profile</a></div>
                                     </div>
                                 </div>
                                 <div class="dashboard__address card address-card address-card--featured">
                                     <div class="address-card__badge tag-badge tag-badge--theme">Default</div>
                                     <div class="address-card__body">
-                                        <div class="address-card__name">Helena Garcia</div>
-                                        <div class="address-card__row">Random Federation<br>115302, Moscow<br>ul. Varshavskaya, 15-2-178</div>
+                                        <div class="address-card__name">{{stu.fname}} {{stu.lname}}</div>
+                                        <div class="address-card__row">
+                                            <div class="address-card__row-title">Gender</div>
+                                            <div class="address-card__row-content">{{stu.gender}}</div>
+                                        </div>
                                         <div class="address-card__row">
                                             <div class="address-card__row-title">Phone Number</div>
-                                            <div class="address-card__row-content">38 972 588-42-36</div>
+                                            <div class="address-card__row-content">{{stu.mobile}}</div>
                                         </div>
                                         <div class="address-card__row">
                                             <div class="address-card__row-title">Email Address</div>
-                                            <div class="address-card__row-content">helena@example.com</div>
+                                            <div class="address-card__row-content">{{stu.email}}</div>
                                         </div>
-                                        <div class="address-card__footer"><a href="#">Edit Address</a></div>
+                                        <div class="address-card__footer"><a href="/cust_edit_profile">Edit Address</a></div>
                                     </div>
                                 </div>
                                 <div class="dashboard__orders card">
@@ -104,30 +90,22 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Order</th>
+                                                        <th>Name</th>
                                                         <th>Date</th>
                                                         <th>Status</th>
                                                         <th>Total</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td><a href="account-order-details.html">#8132</a></td>
-                                                        <td>02 April, 2019</td>
-                                                        <td>Pending</td>
-                                                        <td>$2,719.00 for 5 item(s)</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><a href="account-order-details.html">#7592</a></td>
-                                                        <td>28 March, 2019</td>
-                                                        <td>Pending</td>
-                                                        <td>$374.00 for 3 item(s)</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><a href="account-order-details.html">#7192</a></td>
-                                                        <td>15 March, 2019</td>
-                                                        <td>Shipped</td>
-                                                        <td>$791.00 for 4 item(s)</td>
-                                                    </tr>
+                                                    {% for enq in enquiry %}
+                                                     <tr>
+                                                        <td>{{enq.id}}</td>
+                                                        <td>{{enq.name}}</td>
+                                                        <td>{{enq.date}}</td>
+                                                        <td>{{enq.status}}</td>
+                                                        <td>{{enq.cost}}</td>
+                                                        </tr>
+                                                     {% endfor %}
                                                 </tbody>
                                             </table>
                                         </div>

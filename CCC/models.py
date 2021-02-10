@@ -57,3 +57,12 @@ class contact(models.Model):
     name = models.CharField(max_length=40)
     email = models.EmailField()
     msg  = models.CharField(max_length=100)
+
+class apply_leave(models.Model):
+    reason = models.CharField(max_length=100)
+    from_date = models.DateField()
+    to_date = models.DateField()
+    stat = (('Pending','Pending'),('Approved','Approved'),('Rejected','Rejected'))
+    status = models.CharField(max_length=40,choices=stat,default='Pending',null=True)
+    Mechanic = models.ForeignKey('mechanic',on_delete=models.CASCADE,null=True)
+    admin_reason = models.CharField(max_length=100)

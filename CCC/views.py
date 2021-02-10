@@ -1,11 +1,13 @@
 from django.shortcuts import render,redirect
 from .models import *
 from django.db.models import Sum
+from django.http  import HttpResponse
 import math
 import random
 import smtplib
 from django.core.mail import send_mail
 from django.conf import settings
+import csv
 
 
 
@@ -55,7 +57,6 @@ def forgotpasschange(request):
     if request.method == 'POST':
         newpass = request.POST.get('newpass')
         customer.objects.all().filter(email = request.session['email']).update(password=newpass)
-        del request.session['email']
         text = 'Your Password has Succesfully Change!'
         return redirect('customerlogin')
     else:
@@ -84,7 +85,9 @@ def register(request):
             password = request.POST.get('password')
             reg = customer(fname = fname,lname=lname,email=email,mobile=mobile,gender=gender,address=address,password=password)
             reg.save()
+            stu = customer.objects.all()
             text = "You have Successfully Registred!"
+            send_mail('Registered Successfully(car care Center)', 'You Are registered Successfuly in Our System!', 'gohilbhavesh1997@gmail.com', [f'{email}'])
             return render(request,"car/customerregister.html",{"text":text})
     else:
         return render(request,"car/customerregister.html")
@@ -103,6 +106,26 @@ def customerlogin(request):
             return render(request,"car/login.html",{"text":email})           
     else:   
         return render(request,"car/login.html")
+
+def cust_edit_profile(request):
+    if request.method == 'POST':
+        if 'user' in request.session:
+            cust = customer.objects.get(fname = request.session['user'])
+            fname = request.POST.get('fname')
+            email = request.POST.get('email')
+            enquiry = customer.objects.all().filter(id=cust.id).update(fname=fname,email=email)
+            enquiry.save()
+            return render(request,'car/customer_profile.html',{'user':cust,'stu':enquiry})
+        else:
+            return redirect('customerlogin')
+        
+    else:
+        if 'user' in request.session:
+            cust = customer.objects.get(fname = request.session['user'])
+        return render(request,'car/cust_profile_edit.html',{'user':cust})
+
+
+
 def customer_feedback(request):
     if request.method == 'POST':    
         if 'user' in request.session:
@@ -210,7 +233,11 @@ def del_customer_request(request,id):
 def customer_profile(request):
     if 'user' in request.session:
         cust = customer.objects.get(fname = request.session['user'])
-        return render(request,"car/customer_profile.html",{'user':cust})
+        # enqiry = cus_request.objects.all().filter(Customer_id = cust.id, status="Approved").order_by('date')
+        cus= customer.objects.get(id=cust.id)
+        return render(request,"car/customer_profile.html",{"user":cust,"stu":cus})
+    else:
+        return redirect('customerlogin')
 
 def forgotpassword(request):
     if request.method == 'POST': 
@@ -231,6 +258,7 @@ def forgotpassword(request):
             return render(request,'car/forgot_password.html',{'mail':text})
     else:   
         return render(request,'car/forgot_password.html')
+
 
 def customer_logout(request):
     if 'user' in request.session:
@@ -316,8 +344,82 @@ def mechanic_update_status(request,id):
             return render(request,'car/mechanic_update_status.html',{'mech':user})
         else:  
             return redirect('mechanic_service')
+def mechanic_leave(request):
+    if 'mec' in request.session:
+        user = mechanic.objects.get(fname=request.session['mec'])
+        return render(request,'car/mechanicleave.html',{'mech':user})
+    else:
+        return redirect('mechaniclogin')
+
+def mechanic_leave_form(request):
+    if request.method == 'POST':
+        if 'mec' in request.session:
+            user = mechanic.objects.get(fname=request.session['mec'])
+            print("gfdgdfgdfgfd")
+            reason = request.POST.get('reason')
+            from_date = request.POST.get('from_date')
+            to_date = request.POST.get('to_date') 
+            leave = apply_leave(reason=reason,from_date=from_date,to_date=to_date,Mechanic_id=user.id) 
+            leave.save()
+            print("gfdgdfgdfgfd")
+            print(leave)
+            return render(request,'car/mechanic_apply_leave.html',{"mech":user})
+        else:
+            return redirect('mechaniclogin')
+    else:
+        if 'mec' in request.session:
+            user = mechanic.objects.get(fname=request.session['mec'])
+            return render(request,'car/mechanic_apply_leave.html',{"mech":user})
+        else:
+            return redirect('mechaniclogin')
+
+def leave_status(request):
+    if 'mec' in request.session:
+        user = mechanic.objects.get(fname=request.session['mec'])
+        leave_stat = apply_leave.objects.filter(Mechanic_id=user.id) 
+        return render(request,'car/leave_status.html',{'mech':user,'leave_stat':leave_stat})
+    else:
+        return redirect('mechaniclogin')
 
 def mechanic_logout(request):
     if 'mec' in request.session:
         del request.session['mec']
         return redirect('mechaniclogin')
+
+
+#Export csv file
+
+def export_csv(modeladmin, request, queryset):
+    import csv
+    from django.utils.encoding import smart_str
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=Customer_Request.csv'
+    writer = csv.writer(response, csv.excel)
+    response.write(u'\ufeff'.encode('utf8')) # BOM (optional...Excel needs it to open UTF-8 file properly)
+    writer.writerow([
+        smart_str(u"ID"),
+        smart_str(u"category"),
+        smart_str(u"name"),
+        smart_str(u"brand"),
+        smart_str(u"model"),
+        smart_str(u"problem"),
+        smart_str(u"date"),
+        smart_str(u"date"),
+        smart_str(u"cost"),
+        smart_str(u"status"),
+    ])
+    for obj in queryset:
+        writer.writerow([
+            smart_str(obj.pk),
+            smart_str(obj.category),
+            smart_str(obj.number),
+            smart_str(obj.name),
+            smart_str(obj.brand),
+            smart_str(obj.model),
+            smart_str(obj.problem),
+            smart_str(obj.date),
+            smart_str(obj.cost),
+            smart_str(obj.status),
+        ])
+    return response
+export_csv.short_description = u"Export CSV"
