@@ -8,6 +8,8 @@ import smtplib
 from django.core.mail import send_mail
 from django.conf import settings
 import csv
+from random import *
+import string
 
 
 
@@ -82,12 +84,14 @@ def register(request):
             mobile = request.POST.get('mobile_no')
             gender = request.POST.get('gender')
             address = request.POST.get('address')
-            password = request.POST.get('password')
+            char = string.ascii_letters + string.digits
+            password ="".join(choice(char)
+            for x in range(randint(6,10)))
             reg = customer(fname = fname,lname=lname,email=email,mobile=mobile,gender=gender,address=address,password=password)
             reg.save()
             stu = customer.objects.all()
             text = "You have Successfully Registred!"
-            send_mail('Registered Successfully(car care Center)', 'You Are registered Successfuly in Our System!', 'gohilbhavesh1997@gmail.com', [f'{email}'])
+            send_mail('Registered Successfully(car care Center)', f'You Are registered Successfuly in Our System! {password}', 'gohilbhavesh1997@gmail.com', [f'{email}'])
             return render(request,"car/customerregister.html",{"text":text})
     else:
         return render(request,"car/customerregister.html")
@@ -241,14 +245,15 @@ def customer_profile(request):
 
 def forgotpassword(request):
     if request.method == 'POST': 
+        
         try:
-            useremail = request.POST.get('email')
-            mail = customer.objects.get(email = useremail) 
-            
+            useremail = request.POST.get('email'
+            mail = customer.objects.get(email = useremail)
             num = "1234567890"
-            otp = ''
-            for i in range(4):
-                otp += num[math.floor(random.random() * 10)]
+            otp = randint(0000,9999)
+            # for i in range(4):
+                # otp += num[math.floor(random.random() * 10)]
+            print(otp)
             request.session['email'] = mail.email
             request.session['otp'] = otp
             send_mail('Forgot Password(car care Center)', f'otp is {otp}', 'gohilbhavesh1997@gmail.com', [f'{useremail}'])
