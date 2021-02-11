@@ -7,7 +7,7 @@ from .views import export_csv
 
 # Register your models here.
 class customeradmin(admin.ModelAdmin):
-    list_display = ['fname','lname','email','mobile','gender','address']
+    list_display = ['fname','lname','email','mobile','gender','address','image']
 admin.site.register(customer,customeradmin)
 
 class mechanicadmin(admin.ModelAdmin):

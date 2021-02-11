@@ -11,6 +11,7 @@ class customer(models.Model):
     gender = models.CharField(max_length=7)
     address = models.CharField(max_length=100)
     password = models.CharField(max_length=20)
+    image = models.ImageField(upload_to='images/') 
 
 
     def __str__(self):

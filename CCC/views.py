@@ -7,6 +7,7 @@ import random
 import smtplib
 from django.core.mail import send_mail
 from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 import csv
 from random import *
 import string
@@ -21,7 +22,7 @@ def index(request):
 def home(request):
     return render(request,"car/index.html")
 
-def login(request):
+def login(request): 
     return render(request,"car/login.html")
 
 def aboutus(request):
@@ -40,15 +41,37 @@ def contactus(request):
          
 def trackorder(request):
     return render(request,"car/track-order.html")
-
+#======================================================================#
+#                  Customer Related Views                              #
+#======================================================================#
 def changepassword(request):
     return render(request,"car/change-password.html")
 
+def forgotpassword(request):
+    if request.method == 'POST':         
+        try:
+            useremail = request.POST.get('email')
+
+            mail = customer.objects.get(email = useremail)
+            num = "1234567890"
+            otp = randint(0000,9999)
+            # for i in range(4):
+                # otp += num[math.floor(random.random() * 10)]
+            request.session['email'] = mail.email
+            request.session['otp'] = otp
+            send_mail('Forgot Password(car care Center)', f'Customer otp is: {otp}', 'gohilbhavesh1997@gmail.com', [f'{useremail}'])
+            return redirect('check_otp')   
+        except:
+            text = "Email is not Registered!"
+            return render(request,'car/forgot_password.html',{'mail':text})
+    else:   
+        return render(request,'car/forgot_password.html')
+
 def check_otp(request):
     if request.method == 'POST':
-        otppass = request.POST.get('otppass')
-        if otppass==request.session['otp']:
-            return redirect('forgotpasschange')
+        otppass = int(request.POST.get('otppass'))
+        if otppass==request.session.get('otp'):
+            return redirect('forgotpasschange')  
         else:
             text = "you have entered wrong otp..!"
             return render(request,'car/otp_check.html',{'otp':text})
@@ -64,15 +87,13 @@ def forgotpasschange(request):
     else:
         return render(request,'car/forgot_password_change.html')
 
-#======================================================================#
-#                  Customer Related Views                              #
-#======================================================================#
+
 
 def customerbase(request):
     return render(request,"car/customerindex.html")
 
 def register(request):
-    if request.method == 'POST':
+    if request.method == 'POST' and request.FILES['image']:
         try:
             if customer.objects.get(email = request.POST['email']):
                 mail = "Already Registered with this email!"
@@ -84,14 +105,18 @@ def register(request):
             mobile = request.POST.get('mobile_no')
             gender = request.POST.get('gender')
             address = request.POST.get('address')
+            myfile = request.FILES['image']
+            fs = FileSystemStorage()
+            filename = fs.save(myfile.name, myfile)
+            uploaded_file_url = fs.url(filename)
             char = string.ascii_letters + string.digits
             password ="".join(choice(char)
             for x in range(randint(6,10)))
-            reg = customer(fname = fname,lname=lname,email=email,mobile=mobile,gender=gender,address=address,password=password)
+            reg = customer(fname = fname,lname=lname,email=email,mobile=mobile,gender=gender,address=address,password=password,image=myfile)
             reg.save()
             stu = customer.objects.all()
-            text = "You have Successfully Registred!"
-            send_mail('Registered Successfully(car care Center)', f'You Are registered Successfuly in Our System! {password}', 'gohilbhavesh1997@gmail.com', [f'{email}'])
+            text = "Your Password Will Be Sent Your Registered Mail id..!"
+            send_mail('Registered Successfully car care Center', f'You Are registered Successfuly in Our System!\n Your Password is: {password}', 'gohilbhavesh1997@gmail.com', [f'{email}'])
             return render(request,"car/customerregister.html",{"text":text})
     else:
         return render(request,"car/customerregister.html")
@@ -111,22 +136,42 @@ def customerlogin(request):
     else:   
         return render(request,"car/login.html")
 
+def customer_profile(request):
+    if 'user' in request.session:
+        cust = customer.objects.get(fname = request.session['user'])
+        # enqiry = cus_request.objects.all().filter(Customer_id = cust.id, status="Approved").order_by('date')
+        cus= customer.objects.get(id=cust.id)
+        return render(request,"car/customer_profile.html",{"user":cust,"stu":cus})
+    else:
+        return redirect('customerlogin')
+
+
 def cust_edit_profile(request):
     if request.method == 'POST':
-        if 'user' in request.session:
+        if 'user' in request.session and request.FILES['image']:
             cust = customer.objects.get(fname = request.session['user'])
             fname = request.POST.get('fname')
+            lname = request.POST.get('lname')
             email = request.POST.get('email')
-            enquiry = customer.objects.all().filter(id=cust.id).update(fname=fname,email=email)
-            enquiry.save()
-            return render(request,'car/customer_profile.html',{'user':cust,'stu':enquiry})
+            gender = request.POST.get('gender')
+            address = request.POST.get('address')
+            mobile = request.POST.get('mobile')
+            myfile = request.FILES['image']
+            fs = FileSystemStorage()
+            filename = fs.save(myfile.name, myfile)
+            uploaded_file_url = fs.url(filename)
+            enquiry = customer.objects.all().filter(id=cust.id).update(fname=fname,lname=lname,email=email,gender=gender,address=address,mobile=mobile,image=myfile)
+            request.session['user']=fname
+            return redirect('customer_profile')
         else:
             return redirect('customerlogin')
         
     else:
         if 'user' in request.session:
             cust = customer.objects.get(fname = request.session['user'])
-        return render(request,'car/cust_profile_edit.html',{'user':cust})
+            return render(request,'car/cust_profile_edit.html',{'user':cust})
+        else:
+            return redirect('customerlogin')
 
 
 
@@ -234,35 +279,9 @@ def del_customer_request(request,id):
         enquiry.delete()
         return redirect('customer_view_request')
  
-def customer_profile(request):
-    if 'user' in request.session:
-        cust = customer.objects.get(fname = request.session['user'])
-        # enqiry = cus_request.objects.all().filter(Customer_id = cust.id, status="Approved").order_by('date')
-        cus= customer.objects.get(id=cust.id)
-        return render(request,"car/customer_profile.html",{"user":cust,"stu":cus})
-    else:
-        return redirect('customerlogin')
 
-def forgotpassword(request):
-    if request.method == 'POST': 
-        
-        try:
-            useremail = request.POST.get('email'
-            mail = customer.objects.get(email = useremail)
-            num = "1234567890"
-            otp = randint(0000,9999)
-            # for i in range(4):
-                # otp += num[math.floor(random.random() * 10)]
-            print(otp)
-            request.session['email'] = mail.email
-            request.session['otp'] = otp
-            send_mail('Forgot Password(car care Center)', f'otp is {otp}', 'gohilbhavesh1997@gmail.com', [f'{useremail}'])
-            return redirect('check_otp')   
-        except:
-            text = "Email is not Registered!"
-            return render(request,'car/forgot_password.html',{'mail':text})
-    else:   
-        return render(request,'car/forgot_password.html')
+
+
 
 
 def customer_logout(request):
@@ -297,7 +316,18 @@ def mechaniclogin(request):
 def mechanicindex(request):
     if 'mec' in request.session:
         user = mechanic.objects.get(fname = request.session['mec'])
-        return render(request,"car/mechanicindex.html",{'mech':user})
+        count_req = cus_request.objects.all().filter(Mechanic_id = user.id, status = 'Approved').count()
+        work_progress =  cus_request.objects.all().filter(Mechanic_id = user.id, status = 'Repairing').count()
+        work_complete = cus_request.objects.all().filter(Mechanic_id = user.id, status = 'Reoairing Done').count()
+        Salary  = mechanic.objects.get(salary=user.salary)
+        dict = {
+            'mech':user,
+            'count_req':count_req,
+            'work_progress':work_progress,
+            'work_complete':work_complete,
+            'Salary':Salary
+        }
+        return render(request,"car/mechanicindex.html",context=dict)
     else:
         return redirect('mechaniclogin')
 
@@ -386,6 +416,47 @@ def leave_status(request):
     else:
         return redirect('mechaniclogin')
 
+def mechanicforgotpass(request):
+    if request.method == 'POST':         
+        try:
+            useremail = request.POST.get('email')
+
+            mail = mechanic.objects.get(email = useremail)
+            num = "1234567890"
+            otp = randint(0000,9999)
+            # for i in range(4):
+                # otp += num[math.floor(random.random() * 10)]
+            request.session['email'] = mail.email
+            request.session['otp'] = otp
+            send_mail('Forgot Password(car care Center)', f'Mechnic otp is: {otp}', 'gohilbhavesh1997@gmail.com', [f'{useremail}'])
+            return redirect('mechanic_check_otp')   
+        except:
+            text = "Email is not Registered!"
+            return render(request,'car/mechanicforgotpass.html',{'mail':text})
+    else:   
+        return render(request,'car/mechanicforgotpass.html')
+
+def mechanic_check_otp(request):
+    if request.method == 'POST':
+        otppass = int(request.POST.get('otppass'))
+        if otppass==request.session.get('otp'):
+            return redirect('mechanicforgotpasschange')  
+        else:
+            text = "you have entered wrong otp..!"
+            return render(request,'car/mechanic_check_otp.html',{'otp':text})
+    else:   
+        return render(request,"car/mechanic_check_otp.html")
+
+def mechanicforgotpasschange(request):
+    if request.method == 'POST':
+        newpass = request.POST.get('newpass')
+        mechanic.objects.all().filter(email = request.session['email']).update(password=newpass)
+        text = 'Your Password has Succesfully Change!'
+        return redirect('mechaniclogin')
+    else:
+        return render(request,'car/mechanic_forgot_pass_change.html')
+
+
 def mechanic_logout(request):
     if 'mec' in request.session:
         del request.session['mec']
@@ -426,5 +497,4 @@ def export_csv(modeladmin, request, queryset):
             smart_str(obj.cost),
             smart_str(obj.status),
         ])
-    return response
 export_csv.short_description = u"Export CSV"

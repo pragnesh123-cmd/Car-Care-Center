@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from CCC import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -43,8 +45,8 @@ urlpatterns = [
     path("customer_logout",views.customer_logout,name="customer_logout"),
     path("del_customer_request/<int:id>",views.del_customer_request,name='del_customer_request'),
     path('customer_feedback',views.customer_feedback),
-    path("customer_profile",views.customer_profile),
-    path('cust_edit_profile',views.cust_edit_profile,name="cust_edit_profile"),
+    path("customer_profile",views.customer_profile,name='customer_profile'),
+    path("cust_edit_profile",views.cust_edit_profile,name="cust_edit_profile"),
     path('forgotpassword',views.forgotpassword,name='forgotpassword'),
     path('check_otp',views.check_otp,name="check_otp"),
     path('forgotpasschange',views.forgotpasschange,name="forgotpasschange"),
@@ -61,5 +63,12 @@ urlpatterns = [
     path('mechanic_leave',views.mechanic_leave,name='mechanic_leave'),
     path('mechanic_leave_form',views.mechanic_leave_form,name='mechanic_leave_form'),
     path('leave_status',views.leave_status,name='leave_status'),
+    path('mechanicforgotpass',views.mechanicforgotpass,name='mechanicforgotpass'),
+    path('mechanic_check_otp',views.mechanic_check_otp,name="mechanic_check_otp"),
+    path('mechanicforgotpasschange',views.mechanicforgotpasschange,name="mechanicforgotpasschange"),
+    
    
 ]
+
+if settings.DEBUG:
+     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

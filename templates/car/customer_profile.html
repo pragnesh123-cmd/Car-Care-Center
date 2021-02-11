@@ -53,9 +53,12 @@
                             <div class="dashboard">
                                 <div class="dashboard__profile card profile-card">
                                     <div class="card-body profile-card__body">
-                                        <div class="profile-card__avatar"><img src="{% static "images/avatars/avatar-4.jpg" %}" alt="">
+                            
+                                        <div class="profile-card__avatar"><img height="100px" width="100px" src="{{stu.image.url}}" alt="avatar">
                                         </div>
-                                        <div class="profile-card__name">{{stu.fname}}</div>
+                                        <div>
+                                        <div class="profile-card__name">{{stu.fname}} {{stu.lname}}</div>
+                                    </div>
                                         <div class="profile-card__email">{{stu.email}}</div>
                                         <div class="profile-card__edit"><a href="/cust_edit_profile" class="btn btn-secondary btn-sm">Edit Profile</a></div>
                                     </div>
@@ -73,10 +76,9 @@
                                             <div class="address-card__row-content">{{stu.mobile}}</div>
                                         </div>
                                         <div class="address-card__row">
-                                            <div class="address-card__row-title">Email Address</div>
-                                            <div class="address-card__row-content">{{stu.email}}</div>
+                                            <div class="address-card__row-title">Address</div>
+                                            <div class="address-card__row-content">{{stu.address}}</div>
                                         </div>
-                                        <div class="address-card__footer"><a href="/cust_edit_profile">Edit Address</a></div>
                                     </div>
                                 </div>
                                 <div class="dashboard__orders card">

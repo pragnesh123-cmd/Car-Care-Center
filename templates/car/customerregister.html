@@ -76,7 +76,7 @@
                                 </div>
                                 {% endif %}
                                 <h3 class="card-title">Register</h3>
-                                <form method="POST">
+                                <form method="POST" enctype="multipart/form-data">
                                     {% csrf_token %}
                                     <div class="row">
                                         <div class="form-group input-group col-md-6">
@@ -130,13 +130,11 @@
                                         <input name="address" id="address" class="form-control" placeholder="Address" type="address">
                                     </div>
                                     <!-- form-group// -->
-                                    <!-- <div class="form-group input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
-                                        </div>
-                                        <input name="password" id="password" class="form-control" placeholder="Create password" type="password">
-                                    </div>
-                                     form-group
+                                    myfile = request.FILES['image']
+                                    fs = FileSystemStorage()
+                                    filename = fs.save(myfile.name, myfile)
+                                    uploaded_file_url = fs.url(filename)
+                                    <!-- form-group
                                     <div class="form-group input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
