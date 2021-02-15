@@ -138,3 +138,13 @@ EMAIL_HOST_USER = 'gohilbhavesh1997@gmail.com'
 EMAIL_HOST_PASSWORD = 'BHAVESH@@09'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+
+PAYTM_COMPANY_NAME = "Company Name"   # For representation purposes 
+PAYTM_INDUSTRY_TYPE_ID = "Retail"     # For staging environment
+PAYTM_CHANNEL_ID = "WEB"
+PAYTM_MERCHANT_KEY = "C%COWsUyRESHX5XG"
+PAYTM_MERCHANT_ID = "NJDqMf11979674137989"
+PAYTM_CALLBACK_URL = "http://localhost:8000/response/" # Hardcode
+PAYTM_WEBSITE = "WEBSTAGING"
+PAYTM_PAYMENT_GATEWAY_URL = "https://securegw-stage.paytm.in/order/process"
+PAYTM_TRANSACTION_STATUS_URL = "https://securegw-stage.paytm.in/order/status"

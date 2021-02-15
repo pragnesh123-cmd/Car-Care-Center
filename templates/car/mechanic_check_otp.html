@@ -32,6 +32,7 @@
         }
         gtag("js", new Date());
         gtag("config", "UA-97489509-8");
+        $('.alert').alert()
     </script>
 </head>
 
@@ -50,7 +51,9 @@
                             <div class="card-body card-body--padding--2">
                                 {% if otp %}
                                 <div class="alert alert-info">
-                                    <strong>{{otp}}</strong>
+                                    {{otp}}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
                                 </div>
                                 {% endif %}
                                 <h3 class="card-title">OTP</h3>

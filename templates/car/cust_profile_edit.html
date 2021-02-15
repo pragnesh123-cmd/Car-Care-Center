@@ -63,14 +63,14 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                                             </div>
-                                            <input name="fname" id="fname" class="form-control" placeholder="First name" type="text">
+                                            <input name="fname" id="fname" value="{{user.fname}}" class="form-control" placeholder="First name" type="text">
                                         </div>
                                         <!-- form-group// -->
                                         <div class="form-group input-group col-md-6">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                                             </div>
-                                            <input name="lname" id="lname" class="form-control" placeholder="Last name" type="text">
+                                            <input name="lname" id="lname" value="{{user.lname}}" class="form-control" placeholder="Last name" type="text">
                                         </div>
                                         <!-- form-group// -->
                                     </div>
@@ -78,7 +78,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
                                         </div>
-                                        <input name="email" id="email" class="form-control" placeholder="Email address" type="email">
+                                        <input name="email" id="email" value="{{user.email}}" class="form-control" placeholder="Email address" type="email">
                                     </div>
                                     <!-- form-group// -->
                                     <div class="form-group input-group">
@@ -88,7 +88,7 @@
                                         <select class="custom-select" style="max-width: 70px;">
 											<option selected="">+91</option>
 										</select>
-                                        <input name="mobile" id="mobile" class="form-control" placeholder="Phone number">
+                                        <input name="mobile" id="mobile" value="{{user.mobile}}" class="form-control" placeholder="Phone number">
                                     </div>
                                     <!-- form-group// -->
                                     <div class="form-group input-group">
@@ -96,10 +96,10 @@
                                             <span class="input-group-text"> <i class="fa fa-venus-double"></i> </span>
                                         </div>
                                         <select name="gender" class="form-control">
-											<option selected="" disabled>Gender</option>
-											<option>Male</option>
+											<option value={{user.gender}}>{{user.gender}}</option>
 											<option>Female</option>
-											<option>Other</option>
+											<option>Male</option>
+                                            <option>Other</option>
 										</select>
                                     </div>
                                     <!-- form-group end.// -->
@@ -107,7 +107,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"> <i class="fa fa-building"></i> </span>
                                         </div>
-                                        <input name="address" id="address" class="form-control" placeholder="Address" type="address">
+                                        <input name="address" id="address" value="{{user.address}}" class="form-control" placeholder="Address" type="address">
                                     </div>
                                     <!-- form-group// -->
                                      <!-- <div class="form-group input-group">
@@ -125,7 +125,8 @@
                                     </div> -->
                                     <div class="form-group input-group">
                                         
-                                        <input name="image" id="image" class="form-control" type="file">
+                                        <input name="image" src = "{{user.image.url}}" value="{{user.image}}"  id="image" class="form-control" type="file">
+                                        
                                     </div>
                                     <!-- form-group// -->
                                         <div class="form-group">

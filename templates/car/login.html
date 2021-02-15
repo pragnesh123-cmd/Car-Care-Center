@@ -32,6 +32,7 @@
         }
         gtag("js", new Date());
         gtag("config", "UA-97489509-8");
+        $('.alert').alert()
     </script>
 </head>
 
@@ -48,13 +49,18 @@
                         <div class="card flex-grow-1 mb-md-0 mr-0 mr-lg-3 ml-0 ml-lg-4">
                             <div class="card-body card-body--padding--2">
                                 {% if text %}
-                                <div class="alert alert-danger">
-                                    <strong>{{text}}</strong>
-                                </div>
+								<div class="alert alert-danger">
+									{{text}}
+									<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+								</div>
                                 {% endif %}
                                 {% if change %}
                                 <div class="alert alert-danger">
-                                    <strong>{{change}}</strong>
+                                    {{change}}
+                                    
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
                                 </div>
                                 {% endif %}
                                 <h3>{{stu}}</h3>
@@ -82,7 +88,7 @@
                                     </div>
                                     <!-- form-group// -->
                                     <p class="text-center"><a href="/forgotpassword">Forgot Password</a> </p>
-                                    <p class="text-center">Have not Account? <a href="/register">Sign In</a> </p>
+                                    <p class="text-center">Have not Account? <a href="/customerregister">Sign In</a> </p>
                                 </form>
                             </div>
                         </div>

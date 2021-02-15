@@ -1,5 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.conf import settings
+
+from django.utils import timezone
 
 
 
@@ -28,6 +31,7 @@ class mechanic(models.Model):
     salary = models.FloatField(max_length=10)
     address = models.CharField(max_length=50)
     password = models.CharField(max_length=20)
+    image = models.ImageField(upload_to='images/',null = True,blank=True) 
     
 
     def __str__(self):
@@ -67,3 +71,5 @@ class apply_leave(models.Model):
     status = models.CharField(max_length=40,choices=stat,default='Pending',null=True)
     Mechanic = models.ForeignKey('mechanic',on_delete=models.CASCADE,null=True)
     admin_reason = models.CharField(max_length=100)
+
+

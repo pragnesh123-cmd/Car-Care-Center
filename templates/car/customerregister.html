@@ -37,25 +37,14 @@
         }
         gtag("js", new Date());
         gtag("config", "UA-97489509-8");
+        $('.alert').alert()
     </script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script type="text/javascript">
-        $(function() {
-            $("#btnSubmit").click(function() {
-                var password = $("#password").val();
-                var confirmPassword = $("#cpassword").val();
-                if (password != confirmPassword) {
-                    alert("Passwords do not match.");
-                    return false;
-                }
-                return true;
-            });
-        });
-    </script>
+   
 </head>
 
 <body>
-    {% include "car/customerbase.html" %}
+    {% include "car/base.html" %}
 
     <!-- site__body -->
     <div class="site__body">
@@ -69,10 +58,15 @@
                                 {% if text %}
                                 <div class="alert alert-success">
                                     {{text}}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
                                 </div>
-                                {% endif %} {% if mail %}
+                                {% endif %} 
+                                {% if mail %}
                                 <div class="alert alert-info">
-                                    <strong>{{mail}}</strong>
+                                    {{mail}}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
                                 </div>
                                 {% endif %}
                                 <h3 class="card-title">Register</h3>

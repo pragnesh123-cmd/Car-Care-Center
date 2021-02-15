@@ -11,7 +11,7 @@ class customeradmin(admin.ModelAdmin):
 admin.site.register(customer,customeradmin)
 
 class mechanicadmin(admin.ModelAdmin):
-    list_display = ('fname','lname','email','mobile','gender','designation','salary','address')
+    list_display = ('fname','lname','email','mobile','gender','designation','salary','address','image')
 admin.site.register(mechanic,mechanicadmin)
 
 class feedbackadmin(admin.ModelAdmin):

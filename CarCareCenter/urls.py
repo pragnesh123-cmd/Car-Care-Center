@@ -27,7 +27,7 @@ urlpatterns = [
     path('aboutus/',views.aboutus),
     path('contactus/', views.contactus),
     path('trackorder/',views.trackorder),
-    path('register/',views.register),
+    path('customerregister/',views.customerregister),
     # path('customerbase',views.customerlogin),
     path('changepassword',views.changepassword,name="changepassword"),
     path('forgotpassword',views.forgotpassword),
@@ -50,6 +50,7 @@ urlpatterns = [
     path('forgotpassword',views.forgotpassword,name='forgotpassword'),
     path('check_otp',views.check_otp,name="check_otp"),
     path('forgotpasschange',views.forgotpasschange,name="forgotpasschange"),
+    path('cust_change_pass',views.cust_change_pass,name="cust_change_pass"),
 
     #Mechanic URL
 
@@ -66,9 +67,20 @@ urlpatterns = [
     path('mechanicforgotpass',views.mechanicforgotpass,name='mechanicforgotpass'),
     path('mechanic_check_otp',views.mechanic_check_otp,name="mechanic_check_otp"),
     path('mechanicforgotpasschange',views.mechanicforgotpasschange,name="mechanicforgotpasschange"),
+    path("mechanic_profile",views.mechanic_profile,name='mechanic_profile'),
+    path("mech_edit_profile",views.mech_edit_profile,name="mech_edit_profile"),
+    path('mech_change_pass',views.mech_change_pass,name="mech_change_pass"),
+
+
+    ####paytm###
+
+    path('payment',views.payment,name='payment'),
+    path('response',views.response, name='response'),
     
    
 ]
 
 if settings.DEBUG:
      urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+######Paytm Payment#########
+

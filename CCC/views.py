@@ -11,9 +11,51 @@ from django.core.files.storage import FileSystemStorage
 import csv
 from random import *
 import string
+from CCC import Checksum
+
+from CCC.utils import VerifyPaytmResponse
+from django.views.decorators.csrf import csrf_exempt
+
+###################Paytm#############
 
 
 
+
+def payment(request):
+    
+    order_id = Checksum.__id_generator__()
+    bill_amount = "100"
+    data_dict = {
+        'MID': settings.PAYTM_MERCHANT_ID,
+        'INDUSTRY_TYPE_ID': settings.PAYTM_INDUSTRY_TYPE_ID,
+        'WEBSITE': settings.PAYTM_WEBSITE,
+        'CHANNEL_ID': settings.PAYTM_CHANNEL_ID,
+        'CALLBACK_URL': settings.PAYTM_CALLBACK_URL,
+        'MOBILE_NO': '8347386541',
+        'EMAIL': 'gohilbhavesh1997@gmail.com',
+        'CUST_ID': '123123',
+        'ORDER_ID':order_id,
+        'TXN_AMOUNT': bill_amount,
+    } # This data should ideally come from database
+    data_dict['CHECKSUMHASH'] = Checksum.generate_checksum(data_dict, settings.PAYTM_MERCHANT_KEY)
+    context = {
+        'payment_url': settings.PAYTM_PAYMENT_GATEWAY_URL,
+        'comany_name': settings.PAYTM_COMPANY_NAME,
+        'data_dict': data_dict
+    }
+    return render(request, 'car/payment.html', context)
+
+
+@csrf_exempt
+def response(request):
+    resp = VerifyPaytmResponse(request)
+    if resp['verified']:
+        # save success details to db; details in resp['paytm']
+        return HttpResponse("<center><h1>Transaction Successful</h1><center>", status=200)
+    else:
+        # check what happened; details in resp['paytm']
+        return HttpResponse("<center><h1>Transaction Failed</h1><center>", status=400)
+###########End Paytm###############
 # Create your views here.
 
 def index(request):
@@ -87,17 +129,15 @@ def forgotpasschange(request):
     else:
         return render(request,'car/forgot_password_change.html')
 
-
-
 def customerbase(request):
     return render(request,"car/customerindex.html")
 
-def register(request):
+def customerregister(request):
     if request.method == 'POST' and request.FILES['image']:
         try:
             if customer.objects.get(email = request.POST['email']):
                 mail = "Already Registered with this email!"
-                return render(request,"car/customerregister",{"mail":mail})
+                return render(request,"car/customerregister.html",{"mail":mail})
         except:
             fname = request.POST.get('fname')
             lname = request.POST.get('lname')
@@ -135,6 +175,26 @@ def customerlogin(request):
             return render(request,"car/login.html",{"text":email})           
     else:   
         return render(request,"car/login.html")
+
+def cust_change_pass(request):
+    if request.method == 'POST':
+        cust = customer.objects.get(fname = request.session['user'])
+        current = request.POST.get('current')
+        newpass = request.POST.get('newpass')
+        password = request.session.get('password')
+        print(current)
+        print(newpass)
+        try:
+            customer.objects.get(password=current)
+            customer.objects.all().filter(id=cust.id).update(password=newpass)
+            text = "Your Password Successfully Change..."
+            return render(request,'car/cust_change_password.html',{'text':text})
+        except:
+            change = "Current Password is not Match"
+            return render(request,'car/cust_change_password.html',{'change':change})
+
+    else:
+        return render(request,'car/cust_change_password.html')
 
 def customer_profile(request):
     if 'user' in request.session:
@@ -184,7 +244,8 @@ def customer_feedback(request):
             msg = request.POST.get('msg')
             feed = feedback(username=username,email=email,msg=msg)
             feed.save()
-            return render(request,"car/feedback.html",{'user':cust})
+            text = 'Your Feedback Successfully Sent'
+            return render(request,"car/feedback.html",{'user':cust,'text':text})
         else:
             return redirect('customerlogin')     
 
@@ -278,10 +339,6 @@ def del_customer_request(request,id):
         enquiry = cus_request.objects.get(id = id)
         enquiry.delete()
         return redirect('customer_view_request')
- 
-
-
-
 
 
 def customer_logout(request):
@@ -295,7 +352,7 @@ def customer_logout(request):
 
 
 #======================================================#
-#  Mechanic Login                                      #
+#  Mechanic Views                                      #
 #======================================================#
 
 def mechaniclogin(request):
@@ -312,6 +369,68 @@ def mechaniclogin(request):
             return render(request,"car/mechaniclogin.html",{"text":email})           
     else:   
         return render(request,"car/mechaniclogin.html")
+
+def mech_change_pass(request):
+    if request.method == 'POST':
+        user = mechanic.objects.get(fname = request.session['mec'])
+        current = request.POST.get('current')
+        newpass = request.POST.get('newpass')
+        password = request.session.get('password')
+        print(current)
+        print(newpass)
+        try:
+            mechanic.objects.get(password=current)
+            mechanic.objects.all().filter(id=user.id).update(password=newpass)
+            text = "Your Password Successfully Change..."
+            return render(request,'car/mech_change_pass.html',{'text':text,"mech":user})
+        except:
+            change = "Current Password is not Match"
+            return render(request,'car/mech_change_pass.html',{'change':change})
+
+    else:
+        if 'mec' in request.session:
+            user = mechanic.objects.get(fname = request.session['mec'])
+            return render(request,'car/mech_change_pass.html',{'mech':user})
+        else:
+            return redirect('mechaniclogin')
+
+def mechanic_profile(request):
+    if 'mec' in request.session:
+        user = mechanic.objects.get(fname = request.session['mec'])
+        # enqiry = cus_request.objects.all().filter(Customer_id = cust.id, status="Approved").order_by('date')
+        cus= mechanic.objects.get(id=user.id)
+        return render(request,"car/mechanic_profile.html",{"mech":user,"stu":cus})
+    else:
+        return redirect('mechaniclogin')
+
+
+def mech_edit_profile(request):
+    if request.method == 'POST':
+        if 'mec' in request.session and request.FILES['image']:
+            user = mechanic.objects.get(fname = request.session['mec'])
+            fname = request.POST.get('fname')
+            lname = request.POST.get('lname')
+            email = request.POST.get('email')
+            gender = request.POST.get('gender')
+            address = request.POST.get('address')
+            mobile = request.POST.get('mobile')
+            myfile = request.FILES['image']
+            fs = FileSystemStorage()
+            filename = fs.save(myfile.name, myfile)
+            uploaded_file_url = fs.url(filename)
+            enquiry = mechanic.objects.all().filter(id=user.id).update(fname=fname,lname=lname,email=email,gender=gender,address=address,mobile=mobile,image=myfile)
+            request.session['mec']=fname
+            return redirect('mechanic_profile')
+        else:
+            return redirect('mechaniclogin')
+        
+    else:
+        if 'mec' in request.session:
+            user = mechanic.objects.get(fname = request.session['mec'])
+            return render(request,'car/mech_edit_profile.html',{'mech':user})
+        else:
+            return redirect('mechaniclogin')
+
     
 def mechanicindex(request):
     if 'mec' in request.session:
@@ -369,8 +488,7 @@ def mechanic_update_status(request,id):
             user = mechanic.objects.get(fname = request.session['mec'])
             status = request.POST.get('status')
             cus_request.objects.filter(Mechanic_id=user.id).update(status=status)
-            mech = cus_request.objects.all()
-            return HttpResponseRedirect(request,'car/mechanicservice.html',{"mech":user,"work":mech})
+            return redirect('mechanic_service')
         else:
             return redirect('mechaniclogin')
     else:
