@@ -26,8 +26,8 @@ def payment(request):
     order_id = Checksum.__id_generator__()
     bill_amount = "100"
     data_dict = {
-        'MID': settings.PAYTM_MERCHANT_ID,
-        'INDUSTRY_TYPE_ID': settings.PAYTM_INDUSTRY_TYPE_ID,
+        'MID': "cTSIBy37736701153348",
+        'INDUSTRY_TYPE_ID': "Retail",
         'WEBSITE': settings.PAYTM_WEBSITE,
         'CHANNEL_ID': settings.PAYTM_CHANNEL_ID,
         'CALLBACK_URL': settings.PAYTM_CALLBACK_URL,
@@ -37,7 +37,10 @@ def payment(request):
         'ORDER_ID':order_id,
         'TXN_AMOUNT': bill_amount,
     } # This data should ideally come from database
-    data_dict['CHECKSUMHASH'] = Checksum.generate_checksum(data_dict, settings.PAYTM_MERCHANT_KEY)
+    print(settings.PAYTM_MERCHANT_KEY)
+    print(settings.PAYTM_MERCHANT_ID)
+    data_dict['CHECKSUMHASH'] = Checksum.generate_checksum(data_dict, "mA&OnVHKf%aur&J8")
+    print(data_dict)
     context = {
         'payment_url': settings.PAYTM_PAYMENT_GATEWAY_URL,
         'comany_name': settings.PAYTM_COMPANY_NAME,
@@ -48,6 +51,7 @@ def payment(request):
 
 @csrf_exempt
 def response(request):
+    print("####")
     resp = VerifyPaytmResponse(request)
     if resp['verified']:
         # save success details to db; details in resp['paytm']
@@ -56,6 +60,7 @@ def response(request):
         # check what happened; details in resp['paytm']
         return HttpResponse("<center><h1>Transaction Failed</h1><center>", status=400)
 ###########End Paytm###############
+
 # Create your views here.
 
 def index(request):
