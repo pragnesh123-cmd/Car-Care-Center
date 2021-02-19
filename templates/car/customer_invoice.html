@@ -4,7 +4,7 @@
 {% load static %}
 <html>
     <head>
-		<script>window.document.title="Customer Invoice-Car Care Center";</script>
+		<script>window.document.title="Car Care Center-Payment";</script>
         <title></title>
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -40,10 +40,18 @@
                   <td>{{enq.problem}}</td>
                   <td>{{enq.date}}</td>
                   <td>{{enq.cost}}</td>
-					<td><a href="/payment"> <button type="submit" style="width:80px;height:30px;background-color:#28a745;border-color:#28a745;color:#fff;border-radius:3px;" class="btn btn-success">Pay</button></a></td>
+
+				  {% if obj.STATUS == TXN_SUCCESS %}
+					<td>Success</td>
+					{% else %}
+				 <td><a href="/payment/{{enq.id}}"> <button type="submit" style="width:80px;height:30px;background-color:#28a745;border-color:#28a745;color:#fff;border-radius:3px;" class="btn btn-success">Pay</button></a></td>	
+				{% endif %}
 				</tr>
 
+				
+
                 {% endfor %}
+				
 
 
 							</tbody>

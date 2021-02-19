@@ -1,0 +1,65 @@
+{% include "car/customerbase.html" %}
+<!DOCTYPE html>
+
+{% load static %}
+<html>
+    <head>
+		<script>window.document.title="Car Care Center-Payment";</script>
+        <title></title>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="{% static  "style.css" %}">
+    </head>
+    <body>
+        <div class="row">
+			<div class="col-12 col-m-12 col-sm-12">
+				<div class="card">
+					<div class="card-header">
+						<h3 style="color:red; text-align:center" >Approved Request With Cost
+						</h3>
+
+					</div>
+					<div class="card-content">
+						<table>
+							<thead>
+                <tr>
+                  <th>Vehicle Name</th>
+                  <th>Vehicle Number</th>
+                  <th>Problem Description</th>
+                  <th>Enquiry Date</th>
+									<th>Total Cost</th>
+					<th>Payment</th>
+                </tr>
+							</thead>
+							<tbody>
+                {% for i in obj %}
+                <tr>
+                  <td>{{i.ORDER_ID}}</td>
+                  <td>{{i.TXN_AMOUNT}}</td>
+                  <td>{{i.BANKTXNID}}</td>
+                  <td>{{i.BANKNAME}}</td>
+                  <td>{{i.TXNDATE}}</td>
+                  <td>{{i.STATUS}}</td>
+				  
+				 
+				</tr>
+
+				
+
+                {% endfor %}
+				
+
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+<!-- ****** table start ********** -->
+	</div>
+	<!-- end main content -->
+{% include "car/footer.html" %}
+    </body>
+</html>

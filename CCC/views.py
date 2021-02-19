@@ -20,47 +20,64 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 
-
-def payment(request):
-    
-    order_id = Checksum.__id_generator__()
-    bill_amount = "100"
-    data_dict = {
-        'MID': "cTSIBy37736701153348",
-        'INDUSTRY_TYPE_ID': "Retail",
-        'WEBSITE': settings.PAYTM_WEBSITE,
-        'CHANNEL_ID': settings.PAYTM_CHANNEL_ID,
-        'CALLBACK_URL': settings.PAYTM_CALLBACK_URL,
-        'MOBILE_NO': '8347386541',
-        'EMAIL': 'gohilbhavesh1997@gmail.com',
-        'CUST_ID': '123123',
-        'ORDER_ID':order_id,
-        'TXN_AMOUNT': bill_amount,
-    } # This data should ideally come from database
-    print(settings.PAYTM_MERCHANT_KEY)
-    print(settings.PAYTM_MERCHANT_ID)
-    data_dict['CHECKSUMHASH'] = Checksum.generate_checksum(data_dict, "mA&OnVHKf%aur&J8")
-    print(data_dict)
-    context = {
-        'payment_url': settings.PAYTM_PAYMENT_GATEWAY_URL,
-        'comany_name': settings.PAYTM_COMPANY_NAME,
-        'data_dict': data_dict
-    }
+def payment(request,id):
+    if 'user' in request.session:
+        cust = customer.objects.get(fname = request.session['user'])
+        order_id = Checksum.__id_generator__()
+        obj = cus_request.objects.filter(id = id)
+        cost = str(obj[0].cost)
+        cust_id = str(randint(0000,9999))
+        # bill_amount = "100"
+        # print(type(bill_amount))
+        data_dict = {
+            'MID': settings.PAYTM_MERCHANT_ID,
+            'INDUSTRY_TYPE_ID': settings.PAYTM_INDUSTRY_TYPE_ID,
+            'WEBSITE': settings.PAYTM_WEBSITE,
+            'CHANNEL_ID': settings.PAYTM_CHANNEL_ID,
+            'CALLBACK_URL': settings.PAYTM_CALLBACK_URL,
+            'MOBILE_NO': customer.objects.get(id = cust.id).mobile,
+            'EMAIL':  customer.objects.get(id = cust.id).email,
+            'CUST_ID': cust_id,
+            'ORDER_ID':order_id,
+            'TXN_AMOUNT':cost,
+        } # This data should ideally come from database
+        print(settings.PAYTM_MERCHANT_KEY)
+        print(settings.PAYTM_MERCHANT_ID)
+        data_dict['CHECKSUMHASH'] = Checksum.generate_checksum(data_dict, "mA&OnVHKf%aur&J8")
+        print(data_dict)
+        paytm(Customer_id= cust.id,ORDER_ID=order_id).save()
+        context = {
+            'payment_url': settings.PAYTM_PAYMENT_GATEWAY_URL,
+            'comany_name': settings.PAYTM_COMPANY_NAME,
+            'data_dict': data_dict
+        }
     return render(request, 'car/payment.html', context)
 
 
 @csrf_exempt
 def response(request):
-    print("####")
     resp = VerifyPaytmResponse(request)
     if resp['verified']:
+        print(resp)
+        
+        ORDER_ID=resp['paytm']['ORDERID']
+        TXN_AMOUNT=resp['paytm']['TXNAMOUNT']
+        BANKTXNID=resp['paytm']['BANKTXNID']
+        BANKNAME=resp['paytm']['BANKNAME']
+        TXNDATE=resp['paytm']['TXNDATE']
+        STATUS=resp['paytm']['STATUS']
+        print("#####")
+        paytm.objects.filter(ORDER_ID =ORDER_ID).update(TXN_AMOUNT=TXN_AMOUNT,BANKTXNID=BANKTXNID,BANKNAME=BANKNAME,STATUS=STATUS)
+        
         # save success details to db; details in resp['paytm']
-        return HttpResponse("<center><h1>Transaction Successful</h1><center>", status=200)
+        return HttpResponse('<center><h1>Transaction Success</h1><center>',status=200)
     else:
         # check what happened; details in resp['paytm']
         return HttpResponse("<center><h1>Transaction Failed</h1><center>", status=400)
-###########End Paytm###############
+       
 
+        
+###########End Paytm###############
 # Create your views here.
 
 def index(request):
@@ -91,6 +108,8 @@ def trackorder(request):
 #======================================================================#
 #                  Customer Related Views                              #
 #======================================================================#
+
+
 def changepassword(request):
     return render(request,"car/change-password.html")
 
@@ -101,7 +120,7 @@ def forgotpassword(request):
 
             mail = customer.objects.get(email = useremail)
             num = "1234567890"
-            otp = randint(0000,9999)
+            otp = randint(000000,99999)
             # for i in range(4):
                 # otp += num[math.floor(random.random() * 10)]
             request.session['email'] = mail.email
@@ -186,27 +205,31 @@ def cust_change_pass(request):
         cust = customer.objects.get(fname = request.session['user'])
         current = request.POST.get('current')
         newpass = request.POST.get('newpass')
-        password = request.session.get('password')
+        # password = request.session.get('password')
         print(current)
         print(newpass)
         try:
             customer.objects.get(password=current)
             customer.objects.all().filter(id=cust.id).update(password=newpass)
             text = "Your Password Successfully Change..."
-            return render(request,'car/cust_change_password.html',{'text':text})
+            return render(request,'car/cust_change_password.html',{'text':text,'user':cust})
         except:
             change = "Current Password is not Match"
-            return render(request,'car/cust_change_password.html',{'change':change})
+            return render(request,'car/cust_change_password.html',{'change':change,'user':cust})
 
     else:
-        return render(request,'car/cust_change_password.html')
+        if 'user' in request.session:
+            cust = customer.objects.get(fname = request.session['user'])
+            return render(request,'car/cust_change_password.html',{"user":cust})
+        else:
+            return redirect('customerlogin')
 
 def customer_profile(request):
     if 'user' in request.session:
         cust = customer.objects.get(fname = request.session['user'])
-        # enqiry = cus_request.objects.all().filter(Customer_id = cust.id, status="Approved").order_by('date')
+        enquiry = cus_request.objects.all().filter(Customer_id = cust.id, status="Approved").order_by('date')
         cus= customer.objects.get(id=cust.id)
-        return render(request,"car/customer_profile.html",{"user":cust,"stu":cus})
+        return render(request,"car/customer_profile.html",{"user":cust,"stu":cus,'enquiry':enquiry})
     else:
         return redirect('customerlogin')
 
@@ -282,8 +305,29 @@ def customer_dashboard(request):
 def invoice(request):
     if 'user' in request.session:
         cust = customer.objects.get(fname = request.session['user'])
+        # obj = paytm.objects.filter(Customer_id=cust.id,STATUS="TXN_SUCCESS")
+        # print(obj)  
         enquiry = cus_request.objects.all().filter(Customer_id = cust.id).exclude(status = 'Pending')
-        return render(request,"car/customer_invoice.html" ,{"user":cust,'enquiry':enquiry})
+        obj = paytm.objects.filter(Customer_id = cust.id)
+        # enq = zip(obj,enquiry)
+        # print("####",list(enq))
+        # for i,j in enq:
+        #     print("###")
+        #     print(i,j)
+        return render(request,"car/customer_invoice.html" ,{"user":cust,'enquiry':enquiry,'obj':obj})
+    else:
+        return redirect('customerlogin')
+def pay_success(request):
+    if 'user' in request.session:
+        cust = customer.objects.get(fname = request.session['user'])
+        obj = paytm.objects.filter(Customer_id=cust.id).exclude(STATUS="TXN_FAIL")
+        print(obj)  
+        # enq = zip(obj,enquiry)
+        # print("####",list(enq))
+        # for i,j in enq:
+        #     print("###")
+        #     print(i,j)
+        return render(request,"car/payment_success.html" ,{"user":cust,'obj':obj})
     else:
         return redirect('customerlogin')
 def service(request):
@@ -292,6 +336,7 @@ def service(request):
         return render(request,"car/customer_request.html",{"user":cust})
     else:
         return render('customerlogin')
+
 def customer_view_request(request):
     if 'user' in request.session:
         cust = customer.objects.get(fname = request.session['user'])
@@ -390,7 +435,7 @@ def mech_change_pass(request):
             return render(request,'car/mech_change_pass.html',{'text':text,"mech":user})
         except:
             change = "Current Password is not Match"
-            return render(request,'car/mech_change_pass.html',{'change':change})
+            return render(request,'car/mech_change_pass.html',{'change':change,'mech':user})
 
     else:
         if 'mec' in request.session:
@@ -442,7 +487,7 @@ def mechanicindex(request):
         user = mechanic.objects.get(fname = request.session['mec'])
         count_req = cus_request.objects.all().filter(Mechanic_id = user.id, status = 'Approved').count()
         work_progress =  cus_request.objects.all().filter(Mechanic_id = user.id, status = 'Repairing').count()
-        work_complete = cus_request.objects.all().filter(Mechanic_id = user.id, status = 'Reoairing Done').count()
+        work_complete = cus_request.objects.all().filter(Mechanic_id = user.id, status = 'Repairing Done').count()
         Salary  = mechanic.objects.get(salary=user.salary)
         dict = {
             'mech':user,
@@ -592,20 +637,20 @@ def export_csv(modeladmin, request, queryset):
     import csv
     from django.utils.encoding import smart_str
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename=Customer_Request.csv'
+    response['Content-Disposition'] = 'attachment; filename=cus_request.csv'
     writer = csv.writer(response, csv.excel)
     response.write(u'\ufeff'.encode('utf8')) # BOM (optional...Excel needs it to open UTF-8 file properly)
     writer.writerow([
         smart_str(u"ID"),
         smart_str(u"category"),
+        smart_str(u"number"),
         smart_str(u"name"),
-        smart_str(u"brand"),
         smart_str(u"model"),
+        smart_str(u"brand"),
         smart_str(u"problem"),
         smart_str(u"date"),
-        smart_str(u"date"),
-        smart_str(u"cost"),
         smart_str(u"status"),
+        smart_str(u"cost"),
     ])
     for obj in queryset:
         writer.writerow([
@@ -613,11 +658,13 @@ def export_csv(modeladmin, request, queryset):
             smart_str(obj.category),
             smart_str(obj.number),
             smart_str(obj.name),
-            smart_str(obj.brand),
             smart_str(obj.model),
+            smart_str(obj.brand),
             smart_str(obj.problem),
             smart_str(obj.date),
-            smart_str(obj.cost),
             smart_str(obj.status),
+            smart_str(obj.cost),
+            
         ])
+    return response
 export_csv.short_description = u"Export CSV"

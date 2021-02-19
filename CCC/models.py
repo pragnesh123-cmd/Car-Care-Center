@@ -46,7 +46,7 @@ class cus_request(models.Model):
     model = models.CharField(max_length=40)
     problem = models.CharField(max_length=100)
     date = models.DateField(auto_now=True)
-    cost = models.PositiveIntegerField(null = True)
+    cost = models.IntegerField(null = True)
     Customer = models.ForeignKey('customer',on_delete=models.CASCADE,null=True)
     Mechanic = models.ForeignKey('mechanic',on_delete=models.CASCADE,null=True)
     stat = (('Pending','Pending'),('Approved','Approved'),('Repairing','Repairing'),('Repairing Done','Repairing Done'),('Released','Released'))
@@ -71,5 +71,19 @@ class apply_leave(models.Model):
     status = models.CharField(max_length=40,choices=stat,default='Pending',null=True)
     Mechanic = models.ForeignKey('mechanic',on_delete=models.CASCADE,null=True)
     admin_reason = models.CharField(max_length=100)
+
+class paytm(models.Model):
+
+    ORDER_ID = models.CharField(max_length=50)
+    TXN_AMOUNT = models.CharField(max_length=30)
+    BANKTXNID = models.CharField(max_length=50)
+    Customer = models.ForeignKey('customer',on_delete=models.CASCADE)
+    Cus_Request = models.ForeignKey('cus_request',on_delete=models.CASCADE)
+    BANKNAME = models.CharField(max_length=50)
+    TXNDATE = models.DateField(auto_now=True)
+    stat=(('TXN_SUCCESS','TXN_SUCCESS'),('TXN_FAIL','TXN_FAIL'))
+    STATUS = models.CharField(max_length=30,choices=stat,default="TXN_FAIL")
+
+
 
 

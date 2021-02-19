@@ -36,7 +36,7 @@ urlpatterns = [
     path('customerbase',views.customerbase,name ='customerbase'),
     path('login',views.customerlogin,name='customerlogin'),
     path("customer_dashboard",views.customer_dashboard , name='customer_dashboard'),
-    path("invoice" ,views.invoice),
+    path("invoice" ,views.invoice,name='invoice'),
     path("service",views.service),
     path("customer_view_request",views.customer_view_request,name='customer_view_request'),
     path("customer_add_request",views.customer_add_request,name='customer_add_request'),
@@ -74,8 +74,9 @@ urlpatterns = [
 
     ####paytm###
 
-    path('payment',views.payment,name='payment'),
+    path('payment/<int:id>',views.payment,name='payment'),
     path('response',views.response, name='response'),
+    path('pay_success',views.pay_success,name='pay_success')
     
    
 ]

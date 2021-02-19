@@ -38,6 +38,11 @@ class leaveadmin(admin.ModelAdmin):
         return obj.Mechanic.fname
 admin.site.register(apply_leave,leaveadmin)
 
+class paytmadmin(admin.ModelAdmin):
+    list_display = ('ORDER_ID','TXN_AMOUNT','BANKTXNID','BANKNAME','TXNDATE','STATUS')
+
+admin.site.register(paytm,paytmadmin)
+
 
 # User = customer()
 
