@@ -24,12 +24,13 @@
 						<table>
 							<thead>
                 <tr>
-                  <th>Vehicle Name</th>
-                  <th>Vehicle Number</th>
-                  <th>Problem Description</th>
-                  <th>Enquiry Date</th>
-									<th>Total Cost</th>
-					<th>Payment</th>
+                  <th>ORDER_ID</th>
+                  <th>AMOUNT</th>
+                  <th>BANKID</th>
+                  <th>BANKNAME</th>
+					<th>DATE</th>
+					<th>STATUS</th>
+					<th>INVOICE</th>
                 </tr>
 							</thead>
 							<tbody>
@@ -41,6 +42,8 @@
                   <td>{{i.BANKNAME}}</td>
                   <td>{{i.TXNDATE}}</td>
                   <td>{{i.STATUS}}</td>
+
+				  <td><a href="/html_to_pdf_directly"> <button type="submit" style="width:110px;height:30px;background-color:#e52727;border-color:#e52727;color:#fff;border-radius:3px;" class="btn btn-danger">Download</button></a></td>
 				  
 				 
 				</tr>

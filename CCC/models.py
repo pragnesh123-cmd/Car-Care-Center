@@ -51,6 +51,7 @@ class cus_request(models.Model):
     Mechanic = models.ForeignKey('mechanic',on_delete=models.CASCADE,null=True)
     stat = (('Pending','Pending'),('Approved','Approved'),('Repairing','Repairing'),('Repairing Done','Repairing Done'),('Released','Released'))
     status = models.CharField(max_length=40,choices=stat,default='Pending',null=True)
+    payment_status = models.BooleanField(default=False)
 
 class feedback(models.Model):
     username = models.CharField(max_length=40)

@@ -76,7 +76,8 @@ urlpatterns = [
 
     path('payment/<int:id>',views.payment,name='payment'),
     path('response',views.response, name='response'),
-    path('pay_success',views.pay_success,name='pay_success')
+    path('pay_success',views.pay_success,name='pay_success'),
+    path('html_to_pdf_directly',views.html_to_pdf_directly,name='html_to_pdf_directly')
     
    
 ]

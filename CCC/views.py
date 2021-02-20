@@ -15,6 +15,8 @@ from CCC import Checksum
 
 from CCC.utils import VerifyPaytmResponse
 from django.views.decorators.csrf import csrf_exempt
+from xhtml2pdf import pisa 
+import io as BytesIO
 
 ###################Paytm#############
 
@@ -45,7 +47,7 @@ def payment(request,id):
         print(settings.PAYTM_MERCHANT_ID)
         data_dict['CHECKSUMHASH'] = Checksum.generate_checksum(data_dict, "mA&OnVHKf%aur&J8")
         print(data_dict)
-        paytm(Customer_id= cust.id,ORDER_ID=order_id).save()
+        paytm(Customer_id= cust.id,Cus_Request_id = id,ORDER_ID=order_id).save()
         context = {
             'payment_url': settings.PAYTM_PAYMENT_GATEWAY_URL,
             'comany_name': settings.PAYTM_COMPANY_NAME,
@@ -58,20 +60,20 @@ def payment(request,id):
 def response(request):
     resp = VerifyPaytmResponse(request)
     if resp['verified']:
-        print(resp)
-        
         ORDER_ID=resp['paytm']['ORDERID']
         TXN_AMOUNT=resp['paytm']['TXNAMOUNT']
         BANKTXNID=resp['paytm']['BANKTXNID']
         BANKNAME=resp['paytm']['BANKNAME']
         TXNDATE=resp['paytm']['TXNDATE']
         STATUS=resp['paytm']['STATUS']
-        print("#####")
         paytm.objects.filter(ORDER_ID =ORDER_ID).update(TXN_AMOUNT=TXN_AMOUNT,BANKTXNID=BANKTXNID,BANKNAME=BANKNAME,STATUS=STATUS)
-        
+        obj = paytm.objects.filter(ORDER_ID=ORDER_ID)
+        obj1 = cus_request.objects.filter().update(payment_status = True)
+       
         # save success details to db; details in resp['paytm']
         return HttpResponse('<center><h1>Transaction Success</h1><center>',status=200)
     else:
+
         # check what happened; details in resp['paytm']
         return HttpResponse("<center><h1>Transaction Failed</h1><center>", status=400)
        
@@ -195,7 +197,7 @@ def customerlogin(request):
                 request.session['user'] = user.fname
                 return redirect('customer_dashboard')
         except:
-            email = "invalid Login Credintials"
+            email = "Invalid login credintials"
             return render(request,"car/login.html",{"text":email})           
     else:   
         return render(request,"car/login.html")
@@ -308,28 +310,29 @@ def invoice(request):
         # obj = paytm.objects.filter(Customer_id=cust.id,STATUS="TXN_SUCCESS")
         # print(obj)  
         enquiry = cus_request.objects.all().filter(Customer_id = cust.id).exclude(status = 'Pending')
-        obj = paytm.objects.filter(Customer_id = cust.id)
-        # enq = zip(obj,enquiry)
-        # print("####",list(enq))
-        # for i,j in enq:
-        #     print("###")
-        #     print(i,j)
-        return render(request,"car/customer_invoice.html" ,{"user":cust,'enquiry':enquiry,'obj':obj})
+        # obj = cus_request.objects.filter(Customer_id = cust.id)
+        # a = obj[0].payment_status
+        return render(request,"car/customer_invoice.html" ,{"user":cust,'enquiry':enquiry})
     else:
         return redirect('customerlogin')
 def pay_success(request):
     if 'user' in request.session:
         cust = customer.objects.get(fname = request.session['user'])
         obj = paytm.objects.filter(Customer_id=cust.id).exclude(STATUS="TXN_FAIL")
-        print(obj)  
-        # enq = zip(obj,enquiry)
-        # print("####",list(enq))
-        # for i,j in enq:
-        #     print("###")
-        #     print(i,j)
         return render(request,"car/payment_success.html" ,{"user":cust,'obj':obj})
     else:
         return redirect('customerlogin')
+
+
+def html_to_pdf_directly(template_src, context_dict={}): 
+    template = get_template("car/payment_success.html")
+    html  = template.render(context_dict)
+    result = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    return None
+    
 def service(request):
     if 'user' in request.session:
         cust = customer.objects.get(fname = request.session['user'])

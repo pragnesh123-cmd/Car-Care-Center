@@ -16,11 +16,12 @@
     <link rel="stylesheet" href="{% static " vendor/photoswipe/default-skin/default-skin.css " %}">
     <link rel="stylesheet" href="{% static " vendor/select2/css/select2.min.css " %}">
     <link rel="stylesheet" href="{% static " css/style.css " %}">
-    <link rel="stylesheet" href="{% static " css/style.header-spaceship-variant-one.css " %}" media="(min-width: 1200px)">
+    <link rel="stylesheet" href="{% static " css/style.header-spaceship-variant-one.css " %}"
+        media="(min-width: 1200px)">
     <link rel="stylesheet" href="{% static " css/style.mobile-header-variant-one.css " %}" media="(max-width: 1199px)">
 
     <!-- font - fontawesome -->
-    <link rel="stylesheet" href="{% static "vendor/fontawesome/css/all.min.css " %}">
+    <link rel="stylesheet" href="{% static " vendor/fontawesome/css/all.min.css " %}">
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-97489509-8"></script>
 
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -40,7 +41,7 @@
         $('.alert').alert()
     </script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-   
+
 </head>
 
 <body>
@@ -61,7 +62,7 @@
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                 </div>
-                                {% endif %} 
+                                {% endif %}
                                 {% if mail %}
                                 <div class="alert alert-info">
                                     {{mail}}
@@ -77,14 +78,16 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                                             </div>
-                                            <input name="fname" id="fname" class="form-control" placeholder="First name" type="text">
+                                            <input name="fname" id="fname" class="form-control" placeholder="First name"
+                                                type="text">
                                         </div>
                                         <!-- form-group// -->
                                         <div class="form-group input-group col-md-6">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                                             </div>
-                                            <input name="lname" id="lname" class="form-control" placeholder="Last name" type="text">
+                                            <input name="lname" id="lname" class="form-control" placeholder="Last name"
+                                                type="text">
                                         </div>
                                         <!-- form-group// -->
                                     </div>
@@ -92,7 +95,8 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
                                         </div>
-                                        <input name="email" id="email" class="form-control" placeholder="Email address" type="email">
+                                        <input name="email" id="email" class="form-control" placeholder="Email address"
+                                            type="email">
                                     </div>
                                     <!-- form-group// -->
                                     <div class="form-group input-group">
@@ -100,9 +104,10 @@
                                             <span class="input-group-text"> <i class="fa fa-phone"></i> </span>
                                         </div>
                                         <select class="custom-select" style="max-width: 70px;">
-											<option selected="">+91</option>
-										</select>
-                                        <input name="mobile_no" id="mobile_no" class="form-control" placeholder="Phone number">
+                                            <option selected="">+91</option>
+                                        </select>
+                                        <input name="mobile_no" id="mobile_no" class="form-control"
+                                            placeholder="Phone number">
                                     </div>
                                     <!-- form-group// -->
                                     <div class="form-group input-group">
@@ -110,21 +115,22 @@
                                             <span class="input-group-text"> <i class="fa fa-venus-double"></i> </span>
                                         </div>
                                         <select name="gender" class="form-control">
-											<option selected="" disabled>Gender</option>
-											<option>Male</option>
-											<option>Female</option>
-											<option>Other</option>
-										</select>
+                                            <option selected="" disabled>Gender</option>
+                                            <option>Male</option>
+                                            <option>Female</option>
+                                            <option>Other</option>
+                                        </select>
                                     </div>
                                     <!-- form-group end.// -->
                                     <div class="form-group input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"> <i class="fa fa-building"></i> </span>
                                         </div>
-                                        <input name="address" id="address" class="form-control" placeholder="Address" type="address">
+                                        <input name="address" id="address" class="form-control" placeholder="Address"
+                                            type="address">
                                     </div>
                                     <!-- form-group// -->
-                                     <div class="form-group input-group">
+                                    <div class="form-group input-group">
                                         <input name="image" id="image" class="form-control" type="file">
                                     </div>
                                     <!-- form-group
@@ -135,9 +141,10 @@
                                         <input class="form-control" name="cpassword" id="cpassword" placeholder="Repeat password" type="password">
                                     </div> -->
                                     <!-- form-group// -->
-                                        <div class="form-group">
-                                        <button type="submit" id="btnSubmit" class="btn btn-primary btn-block"> Create Account
-										</button>
+                                    <div class="form-group">
+                                        <button type="submit" id="btnSubmit" class="btn btn-primary btn-block"> Create
+                                            Account
+                                        </button>
                                     </div>
                                     <!-- form-group// -->
                                     <p class="text-center">Have an account? <a href="/login">Log In</a> </p>
