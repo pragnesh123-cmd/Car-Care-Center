@@ -2,7 +2,8 @@ from django.contrib import admin
 from .models import *
 # import csv, datetime
 from django.http import HttpResponse
-from .views import export_csv
+from .views import export_csv,paytm_csv
+
 
 
 # Register your models here.
@@ -40,35 +41,22 @@ admin.site.register(apply_leave,leaveadmin)
 
 class paytmadmin(admin.ModelAdmin):
     list_display = ('ORDER_ID','TXN_AMOUNT','BANKTXNID','BANKNAME','TXNDATE','STATUS')
+    actions = [paytm_csv]
+
+class postadmin(admin.ModelAdmin):
+    list_display =['post']
+
+admin.site.register(post_name,postadmin)
+
+class jobdescadmin(admin.ModelAdmin):
+    list_display = ('image','post_name','qualification','skill','experience','job_location','salary')
+admin.site.register(job_desc,jobdescadmin)
+
+class jobadmin(admin.ModelAdmin):
+    list_display = ('name','email','mobile','dob','qualification','post_name','skills','experience','resume')
+
+admin.site.register(job_apply, jobadmin)
 
 admin.site.register(paytm,paytmadmin)
 
-
-# User = customer()
-
-# def export_to_csv(modeladmin, request, queryset):
-#     opts = modeladmin.model._meta
-#     response = HttpResponse(content_type='text/csv')
-#     response['Content-Disposition'] = 'attachment;' 'filename{}.csv'.format(opts.verbose_name)
-#     writer = csv.writer(response)
-#     fields = [field for field in opts.get_fields() if not field.many_to_many and not field.one_to_many]
-#     # Write a first row with header information
-#     writer.writerow([field.verbose_name for field in fields])
-#     # Write data rows
-#     for obj in queryset:
-#         data_row = []
-#         for field in fields:
-#             value = getattr(obj, field.name)
-#             if isinstance(value, datetime.datetime):
-#                 value = value.strftime('%d/%m/%Y')
-#             data_row.append(value)
-#         writer.writerow(data_row)
-
-#     return response
-
-# export_to_csv.short_description = 'Export to CSV'  #short description
-
-# @admin.register(User)
-# class UserAdmin(admin.ModelAdmin):
-#     actions = [export_to_csv]
-
+admin.site.site_header = "Car Care Center"

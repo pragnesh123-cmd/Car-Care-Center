@@ -41,9 +41,9 @@
                   <td>{{enq.date}}</td>
                   <td>{{enq.cost}}</td>
 				  	{% if enq.payment_status %}
-					<td>Success</td>
+					<td>Success |<a href="/html_to_pdf_directly"> Invoice</a></td>
 					{% else %}
-				 	<td><a href="/payment/{{enq.id}}"> <button type="submit" style="width:80px;height:30px;background-color:#28a745;border-color:#28a745;color:#fff;border-radius:3px;" class="btn btn-success">Pay</button></a></td>	
+				 	<td><a href="/payment/{{enq.id}}"> <button type="submit" style="width:80px;height:30px;background-color:#e52727;border-color:#e52727;color:#fff;border-radius:3px;" class = "btn btn-danger">Pay</button></a></td>	
 					{% endif %}
 				</tr>
 

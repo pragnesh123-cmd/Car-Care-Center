@@ -16,7 +16,12 @@ from CCC import Checksum
 from CCC.utils import VerifyPaytmResponse
 from django.views.decorators.csrf import csrf_exempt
 from xhtml2pdf import pisa 
-import io as BytesIO
+from io import BytesIO
+from django.template import loader 
+from django.template.loader import get_template
+from django.views.generic import View
+
+from xhtml2pdf import pisa
 
 ###################Paytm#############
 
@@ -68,10 +73,11 @@ def response(request):
         STATUS=resp['paytm']['STATUS']
         paytm.objects.filter(ORDER_ID =ORDER_ID).update(TXN_AMOUNT=TXN_AMOUNT,BANKTXNID=BANKTXNID,BANKNAME=BANKNAME,STATUS=STATUS)
         obj = paytm.objects.filter(ORDER_ID=ORDER_ID)
-        obj1 = cus_request.objects.filter().update(payment_status = True)
+        id = obj[0].Cus_Request.id
+        obj1 = cus_request.objects.filter(id=id).update(payment_status = True)
        
         # save success details to db; details in resp['paytm']
-        return HttpResponse('<center><h1>Transaction Success</h1><center>',status=200)
+        return redirect('invoice')
     else:
 
         # check what happened; details in resp['paytm']
@@ -207,7 +213,6 @@ def cust_change_pass(request):
         cust = customer.objects.get(fname = request.session['user'])
         current = request.POST.get('current')
         newpass = request.POST.get('newpass')
-        # password = request.session.get('password')
         print(current)
         print(newpass)
         try:
@@ -218,7 +223,6 @@ def cust_change_pass(request):
         except:
             change = "Current Password is not Match"
             return render(request,'car/cust_change_password.html',{'change':change,'user':cust})
-
     else:
         if 'user' in request.session:
             cust = customer.objects.get(fname = request.session['user'])
@@ -324,15 +328,37 @@ def pay_success(request):
         return redirect('customerlogin')
 
 
-def html_to_pdf_directly(template_src, context_dict={}): 
-    template = get_template("car/payment_success.html")
+def render_to_pdf(template_src, context_dict={}):
+    template = get_template(template_src)
     html  = template.render(context_dict)
     result = BytesIO()
     pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
     if not pdf.err:
         return HttpResponse(result.getvalue(), content_type='application/pdf')
     return None
-    
+
+class GeneratePDF(View):
+    def get(self, request, *args, **kwargs):
+        template = get_template('car/invoice.html')
+        context = {
+            "invoice_id": 123,
+            "customer_name": "John Cooper",
+            "amount": 1399.99,
+            "today": "Today",
+        }
+        html = template.render(context)
+        pdf = render_to_pdf('car/invoice.html', context)
+        if pdf:
+            response = HttpResponse(pdf, content_type='application/pdf')
+            filename = f'Invoice.pdf'
+            content = "inline; filename= %s" %(filename)
+            download = request.GET.get("download")
+            if download:
+                content = "attachment; filename=%s" %(filename)
+            response['Content-Disposition'] = content
+            return response
+        return HttpResponse("Not found")
+
 def service(request):
     if 'user' in request.session:
         cust = customer.objects.get(fname = request.session['user'])
@@ -475,8 +501,7 @@ def mech_edit_profile(request):
             request.session['mec']=fname
             return redirect('mechanic_profile')
         else:
-            return redirect('mechaniclogin')
-        
+            return redirect('mechaniclogin')        
     else:
         if 'mec' in request.session:
             user = mechanic.objects.get(fname = request.session['mec'])
@@ -484,6 +509,34 @@ def mech_edit_profile(request):
         else:
             return redirect('mechaniclogin')
 
+
+def career(request):
+    job = job_desc.objects.all()
+    return render(request,"car/career.html",{"job":job})
+
+def applyjob(request):
+    if request.method=='POST' and request.FILES['resume']:
+        fname = request.POST.get('name')
+        email = request.POST.get('email')
+        mobile = request.POST.get('mobile')
+        dob = request.POST.get('dob')
+        pname = request.POST.get('post_name')
+        obj = post_name.objects.get(post=pname)
+        qualification = request.POST.get('qualification')
+        skills = request.POST.get('skills')
+        experience = request.POST.get('experience')
+        resume = request.FILES['resume']
+        fs = FileSystemStorage()
+        filename = fs.save(resume.name, resume)
+        uploaded_file_url = fs.url(filename)
+        job = job_apply(name=fname,email=email,mobile=mobile,dob=dob,post_name_id = obj.id,qualification=qualification,skills=skills,experience=experience,resume=resume)
+        job.save()
+        text = "Job Applied Successfully"
+        name = post_name.objects.all()
+        return render(request,"car/apply_job.html",{"text":text,'name':name})
+    else:
+        name = post_name.objects.all()
+        return render(request,"car/apply_job.html",{'name':name})
     
 def mechanicindex(request):
     if 'mec' in request.session:
@@ -667,6 +720,36 @@ def export_csv(modeladmin, request, queryset):
             smart_str(obj.date),
             smart_str(obj.status),
             smart_str(obj.cost),
+            
+        ])
+    return response
+export_csv.short_description = u"Export CSV"
+
+def paytm_csv(modeladmin, request, queryset):
+    import csv
+    from django.utils.encoding import smart_str
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=Payment.csv'
+    writer = csv.writer(response, csv.excel)
+    response.write(u'\ufeff'.encode('utf8')) # BOM (optional...Excel needs it to open UTF-8 file properly)
+    writer.writerow([
+        smart_str(u"ID"),
+        smart_str(u"ORDER_ID"),
+        smart_str(u"TXN AMOUNT"),
+        smart_str(u"BANKTXNID"),
+        smart_str(u"BANKNAME"),
+        smart_str(u"TXNDATE"),
+        smart_str(u"STATUS"),
+    ])
+    for obj in queryset:
+        writer.writerow([
+            smart_str(obj.pk),
+            smart_str(obj.ORDER_ID),
+            smart_str(obj.TXN_AMOUNT),
+            smart_str(obj.BANKTXNID),
+            smart_str(obj.BANKNAME),
+            smart_str(obj.TXNDATE),
+            smart_str(obj.STATUS),
             
         ])
     return response

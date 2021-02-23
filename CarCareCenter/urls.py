@@ -70,14 +70,15 @@ urlpatterns = [
     path("mechanic_profile",views.mechanic_profile,name='mechanic_profile'),
     path("mech_edit_profile",views.mech_edit_profile,name="mech_edit_profile"),
     path('mech_change_pass',views.mech_change_pass,name="mech_change_pass"),
-
+    path('career',views.career,name='career'),
+    path('applyjob',views.applyjob,name='applyjob'),
 
     ####paytm###
 
     path('payment/<int:id>',views.payment,name='payment'),
     path('response',views.response, name='response'),
     path('pay_success',views.pay_success,name='pay_success'),
-    path('html_to_pdf_directly',views.html_to_pdf_directly,name='html_to_pdf_directly')
+    path('html_to_pdf_directly',views.GeneratePDF.as_view(),name='html_to_pdf_directly')
     
    
 ]

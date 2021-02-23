@@ -53,6 +53,9 @@ class cus_request(models.Model):
     status = models.CharField(max_length=40,choices=stat,default='Pending',null=True)
     payment_status = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.name
+
 class feedback(models.Model):
     username = models.CharField(max_length=40)
     email = models.CharField(max_length=50)
@@ -85,6 +88,28 @@ class paytm(models.Model):
     stat=(('TXN_SUCCESS','TXN_SUCCESS'),('TXN_FAIL','TXN_FAIL'))
     STATUS = models.CharField(max_length=30,choices=stat,default="TXN_FAIL")
 
+class post_name(models.Model):
+    post = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.post
 
+class job_desc(models.Model):
+    image = models.ImageField()
+    post_name = models.ForeignKey('post_name',on_delete=models.CASCADE)
+    qualification = models.CharField(max_length=50)
+    skill = models.CharField(max_length=100)
+    experience = models.CharField(max_length=50)
+    job_location = models.CharField(max_length=50)
+    salary = models.CharField(max_length=50)
 
+class job_apply(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    mobile = models.CharField(max_length=10)
+    dob = models.DateField()
+    post_name = models.ForeignKey('post_name',on_delete=models.CASCADE)
+    qualification = models.CharField(max_length=50)
+    skills = models.CharField(max_length=50)
+    experience = models.CharField(max_length=50,null=True)
+    resume = models.FileField()
