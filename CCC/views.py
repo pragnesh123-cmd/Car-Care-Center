@@ -133,7 +133,7 @@ def forgotpassword(request):
                 # otp += num[math.floor(random.random() * 10)]
             request.session['email'] = mail.email
             request.session['otp'] = otp
-            send_mail('Forgot Password(car care Center)', f'Customer otp is: {otp}', 'gohilbhavesh1997@gmail.com', [f'{useremail}'])
+            send_mail('Forgot Password(car care Center)', f'Customer otp is: {otp}', 'jigarramani40@gmail.com', [f'{useremail}'])
             return redirect('check_otp')   
         except:
             text = "Email is not Registered!"
@@ -188,7 +188,7 @@ def customerregister(request):
             reg.save()
             stu = customer.objects.all()
             text = "Your Password Will Be Sent Your Registered Mail id..!"
-            send_mail('Registered Successfully car care Center', f'You Are registered Successfuly in Our System!\n Your Password is: {password}', 'gohilbhavesh1997@gmail.com', [f'{email}'])
+            send_mail('Registered Successfully car care Center', f'You Are registered Successfuly in Our System!\n Your Password is: {password}', 'jigarramani40@gmail.com', [f'{email}'])
             return render(request,"car/customerregister.html",{"text":text})
     else:
         return render(request,"car/customerregister.html")
@@ -312,13 +312,21 @@ def invoice(request):
     if 'user' in request.session:
         cust = customer.objects.get(fname = request.session['user'])
         # obj = paytm.objects.filter(Customer_id=cust.id,STATUS="TXN_SUCCESS")
-        # print(obj)  
+        print(cust.id)  
         enquiry = cus_request.objects.all().filter(Customer_id = cust.id).exclude(status = 'Pending')
-        # obj = cus_request.objects.filter(Customer_id = cust.id)
-        # a = obj[0].payment_status
+        # enquiry = paytm.objects.filter(Customer = cust.id)
         return render(request,"car/customer_invoice.html" ,{"user":cust,'enquiry':enquiry})
     else:
         return redirect('customerlogin')
+
+# def cust_invoice(request):
+#     if 'user' in request.session:
+#         cust = customer.objects.get(fname = request.session['user'])
+#         enquiry = paytm.objects.filter(Customer = cust.id)
+#         return render(request,"car/payment_success.html" ,{"user":cust,'enquiry':enquiry})
+#     else:
+#         return redirect('customerlogin')
+
 def pay_success(request):
     if 'user' in request.session:
         cust = customer.objects.get(fname = request.session['user'])
@@ -338,19 +346,29 @@ def render_to_pdf(template_src, context_dict={}):
     return None
 
 class GeneratePDF(View):
-    def get(self, request, *args, **kwargs):
+    
+    def get(self, request,order_id, *args, **kwargs):
+        
         template = get_template('car/invoice.html')
+        cust = customer.objects.get(fname = request.session['user'])
+        obj = paytm.objects.filter(Customer_id=cust.id).exclude(STATUS="TXN_FAIL")
+        data = paytm.objects.get(ORDER_ID=order_id)
         context = {
-            "invoice_id": 123,
-            "customer_name": "John Cooper",
-            "amount": 1399.99,
-            "today": "Today",
+            'ORDER_ID' : data.ORDER_ID,
+            'TXN_AMOUNT' : data.TXN_AMOUNT,
+            'BANKTXNID' : data.BANKTXNID,
+            'BANKNAME' : data.BANKNAME,
+            'TXNDATE' : data.TXNDATE,
+            'STATUS' : data.STATUS,
+            'data':data
+
         }
+        print(context)
         html = template.render(context)
         pdf = render_to_pdf('car/invoice.html', context)
         if pdf:
             response = HttpResponse(pdf, content_type='application/pdf')
-            filename = f'Invoice.pdf'
+            filename = f'Payment invoice.pdf'
             content = "inline; filename= %s" %(filename)
             download = request.GET.get("download")
             if download:
@@ -652,7 +670,7 @@ def mechanicforgotpass(request):
                 # otp += num[math.floor(random.random() * 10)]
             request.session['email'] = mail.email
             request.session['otp'] = otp
-            send_mail('Forgot Password(car care Center)', f'Mechnic otp is: {otp}', 'gohilbhavesh1997@gmail.com', [f'{useremail}'])
+            send_mail('Forgot Password(car care Center)', f'Mechnic otp is: {otp}', 'jigarramani40@gmail.com', [f'{useremail}'])
             return redirect('mechanic_check_otp')   
         except:
             text = "Email is not Registered!"

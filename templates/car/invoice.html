@@ -1,126 +1,166 @@
-<html lang="en">
+<html>
+{% load poll_extras %}
+{% load static %}
+
 <head>
-    <meta charset="UTF-8">
-    <title>DotNetTec - Invoice html template bootstrap</title>
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta.2/css/bootstrap.css'>
+    <link rel="stylesheet" href="{% static " vendor/fontawesome/css/all.min.css " %}">
+    <style>
+        .color {
+            background-color: rgba(245, 248, 250, 0.6)
+        }
+
+        body {
+            font-family: sans-serif;
+            font-size: 10pt;
+        }
+
+        p {
+            margin: 0pt;
+        }
+
+        table.items {
+            border: 0.1mm solid #e7e7e7;
+        }
+
+        td {
+            vertical-align: top;
+        }
+
+        .items td {
+            border-left: 0.1mm solid #e7e7e7;
+            border-right: 0.1mm solid #e7e7e7;
+        }
+
+        table thead td {
+            text-align: center;
+            border: 0.1mm solid #e7e7e7;
+        }
+
+        .items td.blanktotal {
+            background-color: #EEEEEE;
+            border: 0.1mm solid #e7e7e7;
+            background-color: #FFFFFF;
+            border: 0mm none #e7e7e7;
+            border-top: 0.1mm solid #e7e7e7;
+            border-right: 0.1mm solid #e7e7e7;
+        }
+
+        .items td.totals {
+            text-align: right;
+            border: 0.1mm solid #e7e7e7;
+        }
+
+        .items td.cost {
+            text-align: "."center;
+        }
+    </style>
 </head>
+
 <body>
-    <div class="container">
-        <div class="card">
-            <div class="card-header">
-                Invoice
-                <strong>01/01/2020</strong>
-                <span class="float-right"> <strong>Status:</strong> Pending</span>
-            </div>
-            <div class="card-body">
-                <div class="row mb-4">
-                    <div class="col-sm-6">
-                        <h6 class="mb-3">From:</h6>
-                        <div>
-                            <strong>DotNetTec</strong>
-                        </div>
-                        <div>Madalinskiego 8</div>
-                        <div>71-101 Szczecin, Poland</div>
-                        <div>Email: info@dotnettec.com</div>
-                        <div>Phone: +91 9800000000</div>
-                    </div>
-                    <div class="col-sm-6">
-                        <h6 class="mb-3">To:</h6>
-                        <div>
-                            <strong>Robert Maxwel</strong>
-                        </div>
-                        <div>Attn: Daniel Marek</div>
-                        <div>43-190 Mikolow, Poland</div>
-                        <div>Email: robert@daniel.com</div>
-                        <div>Phone: +48 123 456 349</div>
-                    </div>
-                </div>
-                <div class="table-responsive-sm">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th class="center">#</th>
-                                <th>Item</th>
-                                <th>Description</th>
-                                <th class="right">Unit Cost</th>
-                                <th class="center">Qty</th>
-                                <th class="right">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="center">1</td>
-                                <td class="left strong">Origin License</td>
-                                <td class="left">Extended License</td>
-                                <td class="right">$999,00</td>
-                                <td class="center">1</td>
-                                <td class="right">$999,00</td>
-                            </tr>
-                            <tr>
-                                <td class="center">2</td>
-                                <td class="left">Custom Services</td>
-                                <td class="left">Instalation and Customization (cost per hour)</td>
-                                <td class="right">$150,00</td>
-                                <td class="center">20</td>
-                                <td class="right">$3.000,00</td>
-                            </tr>
-                            <tr>
-                                <td class="center">3</td>
-                                <td class="left">Hosting</td>
-                                <td class="left">1 year subcription</td>
-                                <td class="right">$499,00</td>
-                                <td class="center">1</td>
-                                <td class="right">$499,00</td>
-                            </tr>
-                            <tr>
-                                <td class="center">4</td>
-                                <td class="left">Platinum Support</td>
-                                <td class="left">1 year subcription 24/7</td>
-                                <td class="right">$3.999,00</td>
-                                <td class="center">1</td>
-                                <td class="right">$3.999,00</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4 col-sm-5">
-                    </div>
-                    <div class="col-lg-4 col-sm-5 ml-auto">
-                        <table class="table table-clear">
-                            <tbody>
-                                <tr>
-                                    <td class="left">
-                                        <strong>Subtotal</strong>
-                                    </td>
-                                    <td class="right">$8.497,00</td>
-                                </tr>
-                                <tr>
-                                    <td class="left">
-                                        <strong>Discount (20%)</strong>
-                                    </td>
-                                    <td class="right">$1,699,40</td>
-                                </tr>
-                                <tr>
-                                    <td class="left">
-                                        <strong>VAT (10%)</strong>
-                                    </td>
-                                    <td class="right">$679,76</td>
-                                </tr>
-                                <tr>
-                                    <td class="left">
-                                        <strong>Total</strong>
-                                    </td>
-                                    <td class="right">
-                                        <strong>$7.477,36</strong>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+    <hr size="" width="" color="#5D6975">
+
+    <table width="100%" style="font-family: sans-serif;" cellpadding="10">
+        <tr>
+            <td width="100%" style="padding: 0px; text-align: center;">
+                <a href="#" target="_blank"><img
+                        src="https://shezannj.com/wp-content/uploads/2019/01/dummy-logo-png-7.png" width="264"
+                        height="110" alt="Logo" align="center" border="0"></a>
+            </td>
+        </tr>
+        <tr>
+            <td width="100%" style="text-align: center; font-size: 20px; font-weight: bold; padding: 0px;">
+                INVOICE
+            </td>
+        </tr>
+        <tr>
+            <td height="10" style="font-size: 0px; line-height: 10px; height: 10px; padding: 0px;">&nbsp;</td>
+        </tr>
+    </table>
+    <table width="100%" style="font-family: sans-serif;" cellpadding="10">
+        <tr>
+            <td width="49%" style="border: 0.3mm solid #eee;" class="color"><strong style="font-size: 16px;">
+                    From</strong><br>Car Care Center<br><i class="fa fa-map-marker" aria-hidden="true"></i>Ahmedabad
+            </td>
+            <td width="2%">&nbsp;</td>
+            <td width="49%" style="border: 0.3mm solid #eee; text-align: right;" class="color"><strong
+                    style="font-size: 16px;">To
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong><br><strong>Name:</strong>
+                {{data.Customer}} {{data.Customer.lname}}<br><strong> Address:</strong>
+                {{data.Customer.address}}<br><strong> Telephone:</strong> {{data.Customer.mobile}}<br><strong>
+                    Email:</strong> {{data.Customer.email}} <br><strong>Date: </strong>{{ somevariable|cut:"0" }}
+            </td>
+        </tr>
+    </table>
+    <br>
+
+    <br>
+
+    <div class="table-responsive-sm">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="center" style="opacity: 40%;">ORDER
+                        ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                    <th class="left strongs" style="opacity: 40%;">
+                        STATUS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                    <th class="left" style="opacity: 40%;">BANKID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                    <th class="right" style="opacity: 40%;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BANKNAME</th>
+                    <th class="center" style="opacity: 40%;">&nbsp;&nbsp;&nbsp;&nbsp;DATE</th>
+                    <th class="right" style="opacity: 40%;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AMOUNT</th>
+                </tr>
+            </thead>
+            <tbody>
+                <hr size="" width="" color="#5D6975">
+                <tr>
+                    <td class="center">&nbsp;&nbsp;{{ORDER_ID}}</td>
+                    <td class="left strong">{{STATUS}}</td>
+                    <td class="left">{{BANKTXNID}}</td>
+                    <td class="right">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{BANKNAME}}
+                    </td>
+                    <td class="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{TXNDATE}}</td>
+                    <td class="right">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        {{TXN_AMOUNT}}</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <br><br><br>
+    <div class="row">
+        <div class="col-lg-4 col-sm-5">
+        </div>
+        <div class="col-lg-4 col-sm-5 ml-auto">
+            <table class="table table-clear">
+                <tbody>
+
+                    <tr>
+                        <td class="left">
+                            <strong
+                                style="font-size: 16px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total</strong>
+                        </td>
+                        <td class="right" style="margin-left: 65px;">
+                            <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{TXN_AMOUNT}}</strong>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <label style="font-size: 10px;"><strong>Note:</strong> SHARE your card number, CVV, PIN, OTP, Internet Banking User
+        ID, Password or URN with anyone, even if the caller claims to be a bank employee. Sharing
+        these details can lead to unauthorised access to your account.
+    </label>
+    
+    <hr size="" width="" color="#5D6975">
 </body>
+
+
 </html>

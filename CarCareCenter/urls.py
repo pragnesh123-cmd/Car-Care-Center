@@ -78,7 +78,8 @@ urlpatterns = [
     path('payment/<int:id>',views.payment,name='payment'),
     path('response',views.response, name='response'),
     path('pay_success',views.pay_success,name='pay_success'),
-    path('html_to_pdf_directly',views.GeneratePDF.as_view(),name='html_to_pdf_directly')
+    path('Payment_invoice/<str:order_id>',views.GeneratePDF.as_view(),name='Payment_invoice'),
+    # path('cust_invoice',views.cust_invoice,name='cust_invoice'),
     
    
 ]

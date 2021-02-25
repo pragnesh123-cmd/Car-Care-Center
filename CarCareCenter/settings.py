@@ -74,6 +74,10 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries':{
+            'my_templatetag': 'CCC.templatetags.poll_extras',
+
+            }
         },
     },
 ]
@@ -137,8 +141,8 @@ STATIC_DIR,
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'gohilbhavesh1997@gmail.com'
-EMAIL_HOST_PASSWORD = 'BHAVESH@@09'
+EMAIL_HOST_USER = 'jigarramani40@gmail.com'
+EMAIL_HOST_PASSWORD = 'jigar2998'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
@@ -152,4 +156,4 @@ PAYTM_WEBSITE = "WEBSTAGING"
 PAYTM_PAYMENT_GATEWAY_URL = "https://securegw-stage.paytm.in/order/process"
 PAYTM_TRANSACTION_STATUS_URL = "https://securegw-stage.paytm.in/order/status"
 
-SESSION_EXPIRE_SECONDS = 600
+# SESSION_EXPIRE_SECONDS = 600
