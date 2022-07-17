@@ -11,7 +11,13 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import environ
 
+env = environ.Env()
+environ.Env.read_env()
+
+
+ENV = env.str("ENV", default="local")
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -141,19 +147,19 @@ STATIC_DIR,
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'jigarramani40@gmail.com'
-EMAIL_HOST_PASSWORD = 'jigar2998'
+EMAIL_HOST_USER = env.str("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
-PAYTM_COMPANY_NAME = "Company Name"   # For representation purposes 
-PAYTM_INDUSTRY_TYPE_ID = "Retail"     # For staging environment
-PAYTM_CHANNEL_ID = "WEB"
-PAYTM_MERCHANT_KEY = "mA&OnVHKf%aur&J8"
-PAYTM_MERCHANT_ID = "cTSIBy37736701153348"
-PAYTM_CALLBACK_URL = "http://localhost:8000/response" # Hardcode
-PAYTM_WEBSITE = "WEBSTAGING"
-PAYTM_PAYMENT_GATEWAY_URL = "https://securegw-stage.paytm.in/order/process"
-PAYTM_TRANSACTION_STATUS_URL = "https://securegw-stage.paytm.in/order/status"
+PAYTM_COMPANY_NAME = env.str("PAYTM_COMPANY_NAME")   # For representation purposes 
+PAYTM_INDUSTRY_TYPE_ID = env.str("PAYTM_INDUSTRY_TYPE_ID")    # For staging environment
+PAYTM_CHANNEL_ID = env.str("PAYTM_CHANNEL_ID")
+PAYTM_MERCHANT_KEY = env.str("PAYTM_MERCHANT_KEY")
+PAYTM_MERCHANT_ID = env.str("PAYTM_MERCHANT_ID")
+PAYTM_CALLBACK_URL = env.str("PAYTM_CALLBACK_URL") # Hardcode
+PAYTM_WEBSITE = env.str("PAYTM_WEBSITE")
+PAYTM_PAYMENT_GATEWAY_URL = env.str("PAYTM_PAYMENT_GATEWAY_URL")
+PAYTM_TRANSACTION_STATUS_URL = env.str("PAYTM_TRANSACTION_STATUS_URL")
 
 # SESSION_EXPIRE_SECONDS = 600

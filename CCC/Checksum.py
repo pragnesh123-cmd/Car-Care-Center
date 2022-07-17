@@ -108,6 +108,3 @@ if __name__ == "__main__":
     }
 
     checksum = generate_checksum(params, 'xxxxxxxxxxxxxxxx')
-    print("\nChecksum Params: ", params)
-    print("\nGenerated Checksum: ", checksum)
-    print("\nVerify Checksum: ", verify_checksum(params, 'xxxxxxxxxxxxxxxx', checksum))

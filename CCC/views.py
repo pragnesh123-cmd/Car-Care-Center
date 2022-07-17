@@ -35,7 +35,6 @@ def payment(request,id):
         cost = str(obj[0].cost)
         cust_id = str(randint(0000,9999))
         # bill_amount = "100"
-        # print(type(bill_amount))
         data_dict = {
             'MID': settings.PAYTM_MERCHANT_ID,
             'INDUSTRY_TYPE_ID': settings.PAYTM_INDUSTRY_TYPE_ID,
@@ -48,10 +47,7 @@ def payment(request,id):
             'ORDER_ID':order_id,
             'TXN_AMOUNT':cost,
         } # This data should ideally come from database
-        print(settings.PAYTM_MERCHANT_KEY)
-        print(settings.PAYTM_MERCHANT_ID)
         data_dict['CHECKSUMHASH'] = Checksum.generate_checksum(data_dict, "mA&OnVHKf%aur&J8")
-        print(data_dict)
         paytm(Customer_id= cust.id,Cus_Request_id = id,ORDER_ID=order_id).save()
         context = {
             'payment_url': settings.PAYTM_PAYMENT_GATEWAY_URL,
@@ -213,8 +209,6 @@ def cust_change_pass(request):
         cust = customer.objects.get(fname = request.session['user'])
         current = request.POST.get('current')
         newpass = request.POST.get('newpass')
-        print(current)
-        print(newpass)
         try:
             customer.objects.get(password=current)
             customer.objects.all().filter(id=cust.id).update(password=newpass)
@@ -312,7 +306,6 @@ def invoice(request):
     if 'user' in request.session:
         cust = customer.objects.get(fname = request.session['user'])
         # obj = paytm.objects.filter(Customer_id=cust.id,STATUS="TXN_SUCCESS")
-        print(cust.id)  
         enquiry = cus_request.objects.all().filter(Customer_id = cust.id).exclude(status = 'Pending')
         # enquiry = paytm.objects.filter(Customer = cust.id)
         return render(request,"car/customer_invoice.html" ,{"user":cust,'enquiry':enquiry})
@@ -363,7 +356,6 @@ class GeneratePDF(View):
             'data':data
 
         }
-        print(context)
         html = template.render(context)
         pdf = render_to_pdf('car/invoice.html', context)
         if pdf:
@@ -473,8 +465,6 @@ def mech_change_pass(request):
         current = request.POST.get('current')
         newpass = request.POST.get('newpass')
         password = request.session.get('password')
-        print(current)
-        print(newpass)
         try:
             mechanic.objects.get(password=current)
             mechanic.objects.all().filter(id=user.id).update(password=newpass)
@@ -632,14 +622,11 @@ def mechanic_leave_form(request):
     if request.method == 'POST':
         if 'mec' in request.session:
             user = mechanic.objects.get(fname=request.session['mec'])
-            print("gfdgdfgdfgfd")
             reason = request.POST.get('reason')
             from_date = request.POST.get('from_date')
             to_date = request.POST.get('to_date') 
             leave = apply_leave(reason=reason,from_date=from_date,to_date=to_date,Mechanic_id=user.id) 
             leave.save()
-            print("gfdgdfgdfgfd")
-            print(leave)
             return render(request,'car/mechanic_apply_leave.html',{"mech":user})
         else:
             return redirect('mechaniclogin')
